@@ -12,7 +12,7 @@ namespace Chat_Bot
 
             
 
-            //UserBase users = new();
+            ////UserBase users = new();
             //SushiBase sushi = new();
 
             //new ChatBot(users, sushi).MainMenu();
