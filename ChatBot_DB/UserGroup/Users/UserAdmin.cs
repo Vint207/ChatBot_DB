@@ -1,7 +1,7 @@
 ﻿using System;
 using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public sealed class UserAdmin : UserMiddle
     {

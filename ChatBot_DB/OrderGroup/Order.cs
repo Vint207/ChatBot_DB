@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public class Order
     {

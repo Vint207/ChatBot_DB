@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public class SushiBase : ICRUD<Sushi, UserMiddle>
     {
@@ -12,16 +12,16 @@ namespace Chat_Bot
 
         public SushiBase()
         {
-            itemList = new()
-            {
-                { new Sushi("Сяке-Маке", 100), 99 },
-                { new Sushi("Филадельфия", 100), 99 },
-                { new Sushi("Суши-Кавасаки", 100), 99 },
-                { new Sushi("Хонда-Ролл", 100), 99 },
-                { new Sushi("Фукусима-Глоу", 100), 99 },
-                { new Sushi("Гуро-Харакири", 100), 99 },
-                { new Sushi("Субару-Импреза", 99999), 99 },
-            };
+            //itemList = new()
+            //{
+            //    { new Sushi("Сяке-Маке", 100), 99 },
+            //    { new Sushi("Филадельфия", 100), 99 },
+            //    { new Sushi("Суши-Кавасаки", 100), 99 },
+            //    { new Sushi("Хонда-Ролл", 100), 99 },
+            //    { new Sushi("Фукусима-Глоу", 100), 99 },
+            //    { new Sushi("Гуро-Харакири", 100), 99 },
+            //    { new Sushi("Субару-Импреза", 99999), 99 },
+            //};
         }
 
         public bool AddItem(Sushi sushi, UserMiddle user)

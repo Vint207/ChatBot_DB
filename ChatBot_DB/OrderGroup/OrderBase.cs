@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public class OrderBase : ICRUD<Order, UserMiddle>
     {

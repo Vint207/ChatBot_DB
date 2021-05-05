@@ -1,18 +1,17 @@
 ﻿using System;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
-    public sealed class Sushi
+    public class Sushi
     {
-
+        public Guid ID { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
 
-        public Sushi(string name) { Name = name; }
-
-        public Sushi(string name, double price) : this(name) { Price = price; }
+        public Sushi() {  }
+        public Sushi(Guid id) { ID = id; }
 
         public void GetInfo(int amount) =>
-            Console.WriteLine($"- {Name}. Цена: {Price} р. Осталось: {amount} шт");
+            Console.WriteLine($"- {Name}. Цена: {Price} р.");
     }
 }

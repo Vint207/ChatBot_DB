@@ -1,6 +1,6 @@
 ﻿using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public class UserMiddle : UserGuest
     {
@@ -22,6 +22,8 @@ namespace Chat_Bot
             WriteLine($"Введи имя (Используй только буквы):");
 
             Validation.TryValidate(this, nameof(Name));
+
+            new UserDB().UpdateItem(this);
         }
 
         public void ChangePassword()
@@ -30,23 +32,27 @@ namespace Chat_Bot
             WriteLine("Введи пароль аккаунта (6-12 букв латинского алфавита или цифр):");
 
             Validation.TryValidate(this, nameof(Password));
+
+            new UserDB().UpdateItem(this);
         }
 
-        public void ChangeMail(UserBase userBase)
+        public void ChangeMail()
         {
             Clear();
+            UserDB dB = new();
+
             WriteLine("Введи адрес электронной почты:");
 
             while (true)
             {
                 Validation.TryValidate(this, nameof(Mail));
 
-                if (userBase.GetItem(new UserMiddle() { Mail = Mail }) == null)
-                { return; }
+                if (dB.ReadItem(this) == null) { break; }
 
                 WriteLine("Данный адрес электронной почты уже зарегистрирован. Попробуй другой:");
                 ReadKey();
             }
+            dB.UpdateItem(this);
         }
 
         public void PutMoney()
@@ -59,6 +65,8 @@ namespace Chat_Bot
             Validation.TryValidate(this, nameof(LastTransaction));
 
             Money += LastTransaction;
+
+            new UserDB().UpdateItem(this);
 
             WriteLine($"Баланс {Name} составляет {Money} р");
             ReadKey();

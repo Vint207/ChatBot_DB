@@ -2,7 +2,7 @@
 using static System.Console;
 
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     sealed class ChatBot
     {
@@ -134,7 +134,7 @@ namespace Chat_Bot
                         user.ChangePassword();
                         break;
                     case "Изменить-почту":
-                        user.ChangeMail(_userBase);
+                        user.ChangeMail();
                         break;
                     case "Назад":
                         return;

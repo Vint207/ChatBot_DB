@@ -1,6 +1,6 @@
 ﻿using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     class Registration
     {
@@ -11,7 +11,7 @@ namespace Chat_Bot
 
             user.ChangeName();
             user.ChangePassword();
-            user.ChangeMail(userBase);
+            user.ChangeMail();
             userBase.AddItem(user);
 
             return user;
@@ -22,7 +22,7 @@ namespace Chat_Bot
             Clear();
             UserMiddle user = new();
 
-            user.ChangeMail(userBase);
+            user.ChangeMail();
             user.ChangePassword();
 
             user = userBase.GetItem(user);

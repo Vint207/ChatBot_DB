@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public class Bin : SushiBase
     {
@@ -12,67 +12,67 @@ namespace Chat_Bot
 
         public void AddItemToBin(SushiBase sushiBase, UserMiddle user)
         {
-            while (true)
-            {
-                Clear();
-                WriteLine($"{user.Name}, Выбери суши для добавления в корзину.");
+            //while (true)
+            //{
+            //    Clear();
+            //    WriteLine($"{user.Name}, Выбери суши для добавления в корзину.");
 
-                WriteLine();
-                Sushi sushi = sushiBase.GetItem(new(ConsoleWork.Choose(sushiBase.GetListItems(user))), user);
+            //    WriteLine();
+            //    Sushi sushi = sushiBase.GetItem(new(ConsoleWork.Choose(sushiBase.GetListItems(user))), user);
 
-                AddItem(sushi, user);
-                sushiBase.DeleteItem(sushi, user);
+            //    AddItem(sushi, user);
+            //    sushiBase.DeleteItem(sushi, user);
 
-                Price += sushi.Price;
+            //    Price += sushi.Price;
 
-                WriteLine();
-                user.Bin.GetAllItemsInfo(user);
+            //    WriteLine();
+            //    user.Bin.GetAllItemsInfo(user);
 
-                WriteLine();
-                WriteLine($"{user.Name}, хочешь заказать еще суши?");
+            //    WriteLine();
+            //    WriteLine($"{user.Name}, хочешь заказать еще суши?");
 
-                if (!ConsoleWork.Choose()) 
-                { break; }
-            }
+            //    if (!ConsoleWork.Choose()) 
+            //    { break; }
+            //}
         }
 
         public void DeleteItemFromBin(SushiBase sushiBase, UserMiddle user)
         {
-            while (BinIsNotEmpty())
-            {
-                Clear();
-                WriteLine($"{user.Name}, Выбери суши, которые хочешь удалить из корзины.");
+            //while (BinIsNotEmpty())
+            //{
+            //    Clear();
+            //    WriteLine($"{user.Name}, Выбери суши, которые хочешь удалить из корзины.");
 
-                WriteLine();
-                Sushi sushi = GetItem(new(ConsoleWork.Choose(GetListItems(user))), user);
+            //    WriteLine();
+            //    Sushi sushi = GetItem(new(ConsoleWork.Choose(GetListItems(user))), user);
 
-                DeleteItem(sushi, user);
-                sushiBase.AddItem(sushi, user);
+            //    DeleteItem(sushi, user);
+            //    sushiBase.AddItem(sushi, user);
 
-                Price -= sushi.Price;
+            //    Price -= sushi.Price;
 
-                WriteLine();
-                user.Bin.GetAllItemsInfo(user);
+            //    WriteLine();
+            //    user.Bin.GetAllItemsInfo(user);
 
-                WriteLine();
-                WriteLine($"{user.Name}, хочешь удалить еще суши?");
+            //    WriteLine();
+            //    WriteLine($"{user.Name}, хочешь удалить еще суши?");
 
-                if (!ConsoleWork.Choose()) 
-                { return; }
-            }
-            Clear();
-            WriteLine($"Корзина пуста.");
-            ReadKey();
+            //    if (!ConsoleWork.Choose()) 
+            //    { return; }
+            //}
+            //Clear();
+            //WriteLine($"Корзина пуста.");
+            //ReadKey();
 
-            bool BinIsNotEmpty()
-            {
-                foreach (var item in itemList)
-                {
-                    if (item.Value > 0)
-                    { return true; }
-                }
-                return false;
-            }
+            //bool BinIsNotEmpty()
+            //{
+            //    foreach (var item in itemList)
+            //    {
+            //        if (item.Value > 0)
+            //        { return true; }
+            //    }
+            //    return false;
+            //}
         }
 
         public void EmptyBin(UserMiddle user)

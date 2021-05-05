@@ -1,4 +1,4 @@
-﻿namespace Chat_Bot
+﻿namespace ChatBot_DB
 {
     interface ICRUD<T>
     {

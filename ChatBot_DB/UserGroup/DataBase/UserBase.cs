@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public class UserBase : ICRUD<UserMiddle>
     {

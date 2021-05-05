@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using static System.Console;
 using static System.ConsoleKey;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     static class ConsoleWork
     {

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public delegate void BaseChangedEvent<in T, in T1>(T obj, T1 obj1, [CallerMemberName] string method = "");
     public delegate void BaseChangedEvent<in T>(T obj, [CallerMemberName] string method = "");

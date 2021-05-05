@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     public abstract class User
     {

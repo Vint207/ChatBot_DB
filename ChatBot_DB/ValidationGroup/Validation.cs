@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using static System.Console;
 
-namespace Chat_Bot
+namespace ChatBot_DB
 {
     sealed class Validation
     {
