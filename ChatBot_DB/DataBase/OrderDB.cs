@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChatBot_DB
 {
-    class OrderDB : RacksDB
+    public class OrderDB : RacksDB
     {
     
         public DateTime OpenDate { get; init; }

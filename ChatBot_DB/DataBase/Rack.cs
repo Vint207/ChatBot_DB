@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChatBot_DB
 {
-    class Rack
+    public class Rack
     {
 
         public string Name { get; set; }

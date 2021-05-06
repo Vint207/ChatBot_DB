@@ -6,13 +6,8 @@ namespace ChatBot_DB
     public class User : UserGuest
     {
 
-        //public Bin Bin;
-        //public OrderBase OrderBase;
-
         public User()
         {
-            //Bin = new();
-            // OrderBase = new();
             //Bin.baseChangedEvent += EventMethods.BinBaseChanged;
             //OrderBase.baseChangedEvent += EventMethods.OrderBaseChanged;
         }
@@ -77,7 +72,7 @@ namespace ChatBot_DB
         {
             //if (OrderBase.GetLastOrder() is Order order)
             //{
-             //   if (!order.Paid && order.PayOrder(this))
+            //   if (!order.Paid && order.PayOrder(this))
             //    {
             //        Money -= order.Price;
             //        return;
@@ -85,8 +80,42 @@ namespace ChatBot_DB
             //    if (order.Paid)
             //    { WriteLine($"Последний заказ оплачен"); }
 
-             //   ReadKey();
+            //   ReadKey();
             //}
+        }
+
+        public void OpenOrder()
+        {
+            BinDB bin = new() { TableId = BinTableId };
+            CreateOrderTable();
+            OrderDB order = new() { TableId = BinTableId };
+            order.WriteAllItems(bin.ReadAllItems());
+            bin.EmptyBin();
+        }
+
+        public void CreateBinTable()
+        {
+            Guid id = Guid.NewGuid();
+            BinDB bin = new() { TableId = id };
+            BinTableId = id;
+            bin.CreateTable(id);
+        }
+
+        public void CreateOrdersTable()
+        {
+            Guid id = Guid.NewGuid();
+            OrdersDB orders = new() { TableId = id };
+            OrdersTableId = id;
+            orders.CreateTable(id);
+        }
+
+        public void CreateOrderTable()
+        {
+            Guid id = Guid.NewGuid();
+            BinDB bin = new() { TableId = id };         
+            bin.CreateTable(id);
+            OrdersDB orders = new() { TableId = OrdersTableId };
+            orders.C
         }
     }
 }

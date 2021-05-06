@@ -39,7 +39,7 @@ namespace ChatBot_DB
             QueryDB.ExecuteNonQuery(query);
         }
 
-        public ProtoUser ReadItem(User user)
+        public User ReadItem(User user)
         {
             SqlCommand query = new($"SELECT * FROM [{TableId}] WHERE Mail='{user.Mail}'");
 
@@ -54,7 +54,7 @@ namespace ChatBot_DB
                 user.LastTransaction = (double)reader["LastTransaction"];
                 user.UserID = (Guid)reader["UserID"];
                 user.OrdersTableId = (Guid)reader["OrdersTableId"];
-                user.BinTableId = (Guid)reader["BinTableId "];
+                user.BinTableId = (Guid)reader["BinTableId"];
             }
             return user;
         }

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Data.SqlClient;
 
 namespace ChatBot_DB
 {
-    class BinDB : RacksDB
+    public class BinDB : RacksDB
     {
 
+        public void EmptyBin()
+        {
+            SqlCommand query = new($"DELETE [{TableId}]");
+            QueryDB.ExecuteNonQuery(query);
+        }
     }
 }

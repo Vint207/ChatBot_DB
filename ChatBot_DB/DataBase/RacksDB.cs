@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    class RacksDB
+    public class RacksDB
     {
 
         public Guid TableId { get; set; }
@@ -66,19 +66,31 @@ namespace ChatBot_DB
 
         public List<Rack> ReadAllItems()
         {
-            SqlCommand query = new($"SELECT * FROM {TableId}");
+            SqlCommand query = new($"SELECT * FROM [{TableId}]");
 
             using SqlDataReader reader = QueryDB.ReadItem(query);
 
             List<Rack> racks = new();
 
+            if (!reader.HasRows) { return null; }
+          
             while (reader.Read())
             { racks.Add(new() { Name = (string)reader["Name"], Amount = (int)reader["Amount"] }); }
 
             return racks;
         }
 
-        public void GetAllRacksInfo()
+        public void WriteAllItems(List<Rack> racks)
+        {
+            SqlCommand query = new($"SELECT * FROM [{TableId}]");
+
+            using SqlDataReader reader = QueryDB.ReadItem(query);         
+
+            foreach (var item in racks)
+            { CreateItem(item); }
+        }
+
+        public void GetAllItemsInfo()
         {
             foreach (var item in ReadAllItems())
             { item?.GetInfo(); }
@@ -113,7 +125,6 @@ namespace ChatBot_DB
         public void DropTable()
         {
             SqlCommand query = new($"DROP TABLE [{TableId}]");
-
             QueryDB.ExecuteNonQuery(query);
         }
     }

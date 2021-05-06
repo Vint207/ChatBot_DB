@@ -1,16 +1,14 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatBot_DB
 {
-    class OrdersDB
+    public class OrdersDB
     {
 
         public Guid TableId { get; set; }
+
+
 
         public void CreateTable(Guid id)
         {
@@ -30,7 +28,6 @@ namespace ChatBot_DB
         public void DropTable()
         {
             SqlCommand query = new($"DROP TABLE [{TableId}]");
-
             QueryDB.ExecuteNonQuery(query);
         }
     }
