@@ -41,16 +41,16 @@ namespace ChatBot_DB
             return false;
         }
 
-        internal bool PayOrder(UserMiddle user)
+        internal bool PayOrder(ProtoUser ProtoUser)
         {
             Clear();
 
             WriteLine();
-            WriteLine($"На счету {user.Money} р");
+            WriteLine($"На счету {ProtoUser.Money} р");
 
-            if (CheckPayment(user.Money)) { return true; }
+            if (CheckPayment(ProtoUser.Money)) { return true; }
 
-            WriteLine($"{user.Name}, на твоем счету недостаточно средств");
+            WriteLine($"{ProtoUser.Name}, на твоем счету недостаточно средств");
 
             return false;
         }
@@ -74,7 +74,7 @@ namespace ChatBot_DB
                 WriteLine("Твой последний заказ:");
 
                 foreach (var sushi in itemList)
-                { sushi.Key.GetInfo(sushi.Value); }
+                { sushi.Key.GetInfo(); }
 
                 WriteLine($"Открыт {OpenDate}");
 

@@ -1,12 +1,6 @@
 ﻿namespace ChatBot_DB
 {
-    public class UserGuest : User
+    public class UserGuest : ProtoUser
     {
-
-        public UserGuest() 
-        {
-            Name = "Гость";
-            ID = new(); 
-        }
     }
 }

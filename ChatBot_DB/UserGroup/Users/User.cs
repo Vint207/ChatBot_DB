@@ -1,44 +1,92 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using static System.Console;
 
 namespace ChatBot_DB
 {
-    public abstract class User
+    public class User : UserGuest
     {
 
-        [Required(ErrorMessage = "Поле не может быть пустым. Введи новое имя:")]
-        [RegularExpression(@"^[a-z\nA-Z\nа-я\nА-Я]{1,12}$", ErrorMessage = "Некорректный формат имени. Введи новое имя:")]
-        public string Name { get; set; }
+        //public Bin Bin;
+        //public OrderBase OrderBase;
 
-        [Required(ErrorMessage = "Поле не может быть пустым. Введи новый пароль:")]
-        [RegularExpression(@"^[a-z\|A-Z\|0-9]{6,12}$", ErrorMessage = "Некорректный формат пароля. Введи новый пароль:")]
-        public string Password { get; set; }
+        public User()
+        {
+            //Bin = new();
+            // OrderBase = new();
+            //Bin.baseChangedEvent += EventMethods.BinBaseChanged;
+            //OrderBase.baseChangedEvent += EventMethods.OrderBaseChanged;
+        }
 
-        [Required(ErrorMessage = "Поле не может быть пустым. Введи новый адрес почты:")]
-        [RegularExpression(@"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-         @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$", ErrorMessage = "Недопустимый адрес электронной почты. Введи новый адрес почты:")]
-        public string Mail { get; set; }
-
-        [Required(ErrorMessage = "Поле не может быть пустым. Введи сумму заново:")]
-        [Range(1, 999999, ErrorMessage = "Сумма должна быть в диапазоне 1 - 999999 р. Введи сумму заново:")]
-        public double Money { get; set; }
-
-        [Required(ErrorMessage = "Поле не может быть пустым. Введи сумму заново:")]
-        [Range(1, 9999, ErrorMessage = "Сумма должна быть в диапазоне 1 - 9999. Введи сумму заново:")]
-        public double LastTransaction { get; set; }
-
-        public Guid ID { get; init; }
-
-        public bool Status { get; set; }
-
-
-        public void GetInfo()
+        public void ChangeName()
         {
             Clear();
-            WriteLine($"Данные пользователя:");
-            WriteLine($"Имя: {Name}\nПароль: {Password}\nБаланс: {Money} р\nПочта: {Mail}");
+            WriteLine($"Введи имя (Используй только буквы):");
+
+            Validation.TryValidate(this, nameof(Name));
+
+            new UsersDB().UpdateItem(this);
+        }
+
+        public void ChangePassword()
+        {
+            Clear();
+            WriteLine("Введи пароль аккаунта (6-12 букв латинского алфавита или цифр):");
+
+            Validation.TryValidate(this, nameof(Password));
+
+            new UsersDB().UpdateItem(this);
+        }
+
+        public void ChangeMail()
+        {
+            Clear();
+            UsersDB dB = new();
+
+            WriteLine("Введи адрес электронной почты:");
+
+            while (true)
+            {
+                Validation.TryValidate(this, nameof(Mail));
+
+                if (dB.ReadItem(this) == null) { break; }
+
+                WriteLine("Данный адрес электронной почты уже зарегистрирован. Попробуй другой:");
+                ReadKey();
+            }
+            dB.UpdateItem(this);
+        }
+
+        public void PutMoney()
+        {
+            Clear();
+            WriteLine($"На счету {Name} {Money} р");
+
+            WriteLine($"Введи сумму для перевода:");
+
+            Validation.TryValidate(this, nameof(LastTransaction));
+
+            Money += LastTransaction;
+
+            new UsersDB().UpdateItem(this);
+
+            WriteLine($"Баланс {Name} составляет {Money} р");
             ReadKey();
+        }
+
+        public void PayOrder()
+        {
+            //if (OrderBase.GetLastOrder() is Order order)
+            //{
+             //   if (!order.Paid && order.PayOrder(this))
+            //    {
+            //        Money -= order.Price;
+            //        return;
+            //    }
+            //    if (order.Paid)
+            //    { WriteLine($"Последний заказ оплачен"); }
+
+             //   ReadKey();
+            //}
         }
     }
 }

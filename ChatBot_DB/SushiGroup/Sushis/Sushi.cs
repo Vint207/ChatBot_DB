@@ -11,7 +11,7 @@ namespace ChatBot_DB
         public Sushi() {  }
         public Sushi(Guid id) { ID = id; }
 
-        public void GetInfo(int amount) =>
+        public void GetInfo() =>
             Console.WriteLine($"- {Name}. Цена: {Price} р.");
     }
 }

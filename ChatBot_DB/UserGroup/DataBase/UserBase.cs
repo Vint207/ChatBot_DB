@@ -3,54 +3,54 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    public class UserBase : ICRUD<UserMiddle>
+    public class ProtoUserBase : ICRUD<User>
     {
 
-        List<UserMiddle> _itemList = new() { new() { Name = "Admin", Password = "admin01", Mail = "admin@mail.com" } };
-        public event BaseChangedEvent<UserMiddle> baseChangedEvent;
+        List<User> _itemList = new() { new() { Name = "Admin", Password = "admin01", Mail = "admin@mail.com" } };
+        public event BaseChangedEvent<User> baseChangedEvent;
 
-        public bool AddItem(UserMiddle user)
+        public bool AddItem(User ProtoUser)
         {
-            if (user != null)
+            if (ProtoUser != null)
             {
-                _itemList.Add(user);
-                baseChangedEvent?.Invoke(user);
+                _itemList.Add(ProtoUser);
+                baseChangedEvent?.Invoke(ProtoUser);
                 return true;
             }
             return false;
         }
 
-        public bool DeleteItem(UserMiddle user)
+        public bool DeleteItem(User ProtoUser)
         {
-            user = _itemList.Find(item => item.Mail == user.Mail && item.Password == user.Password);
+            ProtoUser = _itemList.Find(item => item.Mail == ProtoUser.Mail && item.Password == ProtoUser.Password);
 
-            if (user != null)
+            if (ProtoUser != null)
             {
-                _itemList.Remove(user);
-                baseChangedEvent?.Invoke(user);
+                _itemList.Remove(ProtoUser);
+                baseChangedEvent?.Invoke(ProtoUser);
                 return true;
             }
             return false;
         }
 
-        public UserMiddle GetItem(UserMiddle user)
+        public User GetItem(User ProtoUser)
         {
-            user = _itemList.Find(item => item.Mail == user.Mail && item.Password == user.Password);
+            ProtoUser = _itemList.Find(item => item.Mail == ProtoUser.Mail && item.Password == ProtoUser.Password);
 
-            if (user != null)
+            if (ProtoUser != null)
             {
-                baseChangedEvent?.Invoke(user);
-                return user;
+                baseChangedEvent?.Invoke(ProtoUser);
+                return ProtoUser;
             }
             return null;
         }
 
-        public bool GetAllItemsInfo(UserMiddle user)
+        public bool GetAllItemsInfo(User ProtoUser)
         {
             foreach (var item in _itemList) 
             { item.GetInfo(); }
 
-            baseChangedEvent?.Invoke(user);
+            baseChangedEvent?.Invoke(ProtoUser);
 
             return true;
         }

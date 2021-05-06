@@ -10,7 +10,7 @@ namespace ChatBot_DB
 
         public Bin() { itemList = new(); }
 
-        public void AddItemToBin(SushiBase sushiBase, UserMiddle user)
+        public void AddItemToBin(SushiBase sushiBase, ProtoUser user)
         {
             //while (true)
             //{
@@ -36,7 +36,7 @@ namespace ChatBot_DB
             //}
         }
 
-        public void DeleteItemFromBin(SushiBase sushiBase, UserMiddle user)
+        public void DeleteItemFromBin(SushiBase sushiBase, ProtoUser user)
         {
             //while (BinIsNotEmpty())
             //{
@@ -75,7 +75,7 @@ namespace ChatBot_DB
             //}
         }
 
-        public void EmptyBin(UserMiddle user)
+        public void EmptyBin(User user)
         {
             Price = 0d;
             itemList.Clear();
@@ -83,17 +83,17 @@ namespace ChatBot_DB
             ReadKey();
         }
 
-        public override void GetAllItemsInfo(UserMiddle guest)
-        {
-            Clear();
-            WriteLine("Список суши в корзине:");
+        //public override void GetAllItemsInfo(User guest)
+        //{
+        //    Clear();
+        //    WriteLine("Список суши в корзине:");
 
-            GetItemsInfo(guest);
+        //    GetItemsInfo(guest);
 
-            WriteLine();
-            WriteLine($"- Стоимость товаров в корзине: {Price} р");
-            ReadKey();
-        }
+        //    WriteLine();
+        //    WriteLine($"- Стоимость товаров в корзине: {Price} р");
+        //    ReadKey();
+        //}
 
         public IEnumerator GetEnumerator() => itemList.GetEnumerator();
     }

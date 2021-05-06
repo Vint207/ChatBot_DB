@@ -4,11 +4,11 @@ using static System.Console;
 
 namespace ChatBot_DB
 {
-    public class SushiBase : ICRUD<Sushi, UserMiddle>
+    public class SushiBase : ICRUD<Sushi, ProtoUser>
     {
 
         public Dictionary<Sushi, int> itemList;
-        public event BaseChangedEvent<Sushi, UserMiddle> baseChangedEvent;
+        public event BaseChangedEvent<Sushi, ProtoUser> baseChangedEvent;
 
         public SushiBase()
         {
@@ -24,7 +24,7 @@ namespace ChatBot_DB
             //};
         }
 
-        public bool AddItem(Sushi sushi, UserMiddle user)
+        public bool AddItem(Sushi sushi, ProtoUser ProtoUser)
         {
             foreach (var item in itemList)
             {
@@ -37,33 +37,33 @@ namespace ChatBot_DB
             if (sushi != null)
             {
                 itemList.Add(sushi, 1);
-                baseChangedEvent?.Invoke(sushi, user);
+                baseChangedEvent?.Invoke(sushi, ProtoUser);
                 return true;
             }
             return false;
         }
 
-        public bool DeleteItem(Sushi sushi, UserMiddle user)
+        public bool DeleteItem(Sushi sushi, ProtoUser ProtoUser)
         {
             foreach (var item in itemList)
             {
                 if (item.Key.Name.Equals(sushi?.Name))
                 {
                     itemList[item.Key]--;
-                    baseChangedEvent?.Invoke(sushi, user);
+                    baseChangedEvent?.Invoke(sushi, ProtoUser);
                     return true;
                 }
             }
             return false;
         }
         
-        public Sushi GetItem(Sushi sushi, UserMiddle user)
+        public Sushi GetItem(Sushi sushi, ProtoUser ProtoUser)
         {
             foreach (var item in itemList)
             {
                 if (item.Key.Name.Equals(sushi?.Name))
                 {
-                    baseChangedEvent?.Invoke(sushi, user);
+                    baseChangedEvent?.Invoke(sushi, ProtoUser);
                     return item.Key;
                 }
             }
@@ -71,7 +71,7 @@ namespace ChatBot_DB
             return null;
         }
 
-        public virtual void GetAllItemsInfo(UserMiddle guest)
+        public virtual void GetAllItemsInfo(ProtoUser guest)
         {
             Clear();
             WriteLine("Список суши:");
@@ -81,19 +81,19 @@ namespace ChatBot_DB
             ReadKey();
         }
 
-        protected bool GetItemsInfo(UserMiddle guest)
+        protected bool GetItemsInfo(ProtoUser guest)
         {
             foreach (var item in itemList)
             {
                 if (item.Value > 0)
-                { item.Key.GetInfo(item.Value); }
+                { item.Key.GetInfo(); }
             }
             baseChangedEvent?.Invoke(null, guest);
 
             return true;
         }
 
-        public List<string> GetListItems(UserMiddle guest)
+        public List<string> GetListItems(ProtoUser guest)
         {
             List<string> sushiList = new();
 

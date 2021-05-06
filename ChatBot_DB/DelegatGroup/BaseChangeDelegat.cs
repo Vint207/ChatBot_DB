@@ -10,7 +10,7 @@ namespace ChatBot_DB
     public static class EventMethods
     {
 
-        public static void SushiBaseChanged(Sushi sushi, UserGuest user, [CallerMemberName] string method = "")
+        public static void SushiBaseChanged(Sushi sushi, User ProtoUser, [CallerMemberName] string method = "")
         {
             if (sushi != null || method.Equals("GetAllItemsInfo"))
             {
@@ -35,19 +35,19 @@ namespace ChatBot_DB
             }
         }
 
-        public static void UserBaseChanged(UserGuest user, [CallerMemberName] string method = "")
+        public static void ProtoUserBaseChanged(User ProtoUser, [CallerMemberName] string method = "")
         {
             ForegroundColor = ConsoleColor.Green;
             switch (method)
             {
                 case "AddItem":
-                    WriteLine($"--Администратором добавлен пользователь {user.Name}--");
+                    WriteLine($"--Администратором добавлен пользователь {ProtoUser.Name}--");
                     break;
                 case "DeleteItem":
-                    WriteLine($"--Администратором удален пользователь {user.Name}--");
+                    WriteLine($"--Администратором удален пользователь {ProtoUser.Name}--");
                     break;
                 case "GetItem":
-                    WriteLine($"--Профиль пользователя {user.Name} просмотрен--");
+                    WriteLine($"--Профиль пользователя {ProtoUser.Name} просмотрен--");
                     break;
                 case "GetAllItemsInfo":
                     WriteLine($"--Список пользователей просмотрен--");
@@ -57,7 +57,7 @@ namespace ChatBot_DB
             ReadKey();
         }
 
-        public static void BinBaseChanged(Sushi sushi, UserGuest user, [CallerMemberName] string method = "")
+        public static void BinBaseChanged(Sushi sushi, User ProtoUser, [CallerMemberName] string method = "")
         {
             if (sushi != null || method.Equals("GetAllItemsInfo"))
             {
@@ -65,16 +65,16 @@ namespace ChatBot_DB
                 switch (method)
                 {
                     case "AddItem":
-                        WriteLine($"--В корзину пользователя {user.Name} добавлены суши {sushi.Name} - {sushi.Price} р--");
+                        WriteLine($"--В корзину пользователя {ProtoUser.Name} добавлены суши {sushi.Name} - {sushi.Price} р--");
                         break;
                     case "DeleteItem":
-                        WriteLine($"--Из корзины пользователя {user.Name} удалены суши {sushi.Name} - {sushi.Price} р--");
+                        WriteLine($"--Из корзины пользователя {ProtoUser.Name} удалены суши {sushi.Name} - {sushi.Price} р--");
                         break;
                     case "GetItem":
-                        WriteLine($"--Суши {sushi.Name} просмотрены в корзине пользователя {user.Name}--");
+                        WriteLine($"--Суши {sushi.Name} просмотрены в корзине пользователя {ProtoUser.Name}--");
                         break;
                     case "GetAllItemsInfo":
-                        WriteLine($"--Список суши в корзине пользователя {user.Name} просмотрен--");
+                        WriteLine($"--Список суши в корзине пользователя {ProtoUser.Name} просмотрен--");
                         break;
                 }
                 ForegroundColor = ConsoleColor.White;
@@ -82,13 +82,13 @@ namespace ChatBot_DB
             }
         }
 
-        public static void OrderBaseChanged(Order order, UserGuest user, [CallerMemberName] string method = "")
+        public static void OrderBaseChanged(Order order, User ProtoUser, [CallerMemberName] string method = "")
         {
             ForegroundColor = ConsoleColor.Green;
             switch (method)
             {
                 case "AddItem":
-                    WriteLine($"--Пользователь {user.Name} открыл заказ {order.OpenDate}--");
+                    WriteLine($"--Пользователь {ProtoUser.Name} открыл заказ {order.OpenDate}--");
                     break;
             }
             ForegroundColor = ConsoleColor.White;

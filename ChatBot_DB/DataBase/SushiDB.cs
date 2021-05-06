@@ -1,82 +1,102 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    class SushiDB
+    class SushisDB
     {
 
-        string _server = "Server=DESKTOP-J321LBP;Database=ChatBot;Trusted_Connection=True;";
+        public Guid TableId { get; set; }
 
         public void CreateItem(Sushi sushi)
         {
-            SqlCommand command = new($"INSERT INTO Sushis VALUES" +                                   
-                                     $"('{sushi.Name}'," +
-                                     $"{sushi.Price}," +
-                                     $"'{sushi.ID}')");
-
             if (ReadItem(sushi) == null)
-            { ExecuteNonQuery(command); }
+            {
+                SqlCommand query = new($"INSERT INTO [{TableId}] VALUES" +
+                                         $"('{sushi.Name}'," +
+                                         $"{sushi.Price}," +
+                                         $"'{sushi.ID}')");
+
+                QueryDB.ExecuteNonQuery(query);
+            }
         }
 
         public void UpdateItem(Sushi sushi)
-        {            
-            SqlCommand command = new($"UPDATE Sushis SET " +
+        {
+            SqlCommand query = new($"UPDATE [{TableId}] SET " +
                                      $"Name='{sushi.Name}'," +
                                      $"Price={sushi.Price}" +
                                      $"WHERE ID='{sushi.ID}'");
-            ExecuteNonQuery(command);
+            QueryDB.ExecuteNonQuery(query);
         }
 
         public Sushi ReadItem(Sushi sushi)
         {
-            SqlCommand command = new($"SELECT * FROM Sushis WHERE Name='{sushi.Name}'");
+            SqlCommand query = new($"SELECT * FROM [{TableId}] WHERE Name='{sushi.Name}'");
 
-            try
-            {
-                using SqlConnection connection = new(_server);
-                connection.Open();
-                command.Connection = connection;
-                SqlDataReader reader = command.ExecuteReader();
+            using SqlDataReader reader = QueryDB.ReadItem(query);
 
-                while (reader.Read())
-                {
-                    sushi.ID = (Guid)reader["ID"];
-                    sushi.Name = (string)reader["Name"];
-                    sushi.Price = (int)reader["Price"];
-                }
-                if (!reader.HasRows) { return null; }
-                reader.Close();
-            }
-            catch (SqlException ex)
+            Sushi tempSushi = null;
+
+            while (reader.Read())
             {
-                Console.WriteLine(ex.Message);
-                Console.ReadKey();
+                tempSushi.Name = (string)reader["Name"];
+                tempSushi.Price = (double)reader["Price"];
+                tempSushi.ID = (Guid)reader["ID"];
             }
-            return sushi;
+            return tempSushi;
         }
 
         public void DeleteItem(Sushi sushi)
         {
-            SqlCommand command = new($"DELETE Sushis WHERE Name='{sushi.Name}'");
-            ExecuteNonQuery(command);
+            SqlCommand query = new($"DELETE [{TableId}] WHERE Name='{sushi.Name}'");
+            QueryDB.ExecuteNonQuery(query);
         }
 
-        void ExecuteNonQuery(SqlCommand command)
+        public List<Sushi> ReadAllItems()
         {
-            try
+            SqlCommand query = new($"SELECT * FROM [{TableId}]");
+
+            using SqlDataReader reader = QueryDB.ReadItem(query);
+
+            List<Sushi> sushis = new();
+
+            while (reader.Read())
             {
-                using SqlConnection connection = new(_server);
-                connection.Open();
-                command.Connection = connection;
-                command.ExecuteNonQuery();
-                connection.Close();
+                sushis.Add(new()
+                {
+                    Name = (string)reader["Name"],
+                    Price = (double)reader["Price"],
+                    ID = (Guid)reader["ID"]
+                });
             }
-            catch (SqlException ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.ReadKey();
-            }
+            return sushis;
+        }
+
+        public void GetAllItemsInfo()
+        {
+            foreach (var item in ReadAllItems())
+            { item?.GetInfo(); }
+        }
+
+        public void CreateTable(Guid id)
+        {
+            TableId = id;
+            SqlCommand query = new($"CREATE TABLE [{TableId}]" +
+                                   $"(" +
+                                   $"[Name] nvarchar(25) UNIQUE CHECK([Name] != '')," +
+                                   $"Price float DEFAULT 100 CHECK(Price >= 0)," +
+                                   $"ID uniqueidentifier" +
+                                   $")");
+
+            QueryDB.ExecuteNonQuery(query);
+        }
+
+        public void DropTable()
+        {
+            SqlCommand query = new($"DROP TABLE [{TableId}]");
+            QueryDB.ExecuteNonQuery(query);
         }
     }
 }

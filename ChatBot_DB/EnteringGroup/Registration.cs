@@ -1,45 +1,45 @@
 ﻿using static System.Console;
 
-namespace ChatBot_DB
-{
-    class Registration
-    {
+//namespace ChatBot_DB
+//{
+//    class Registration
+//    {
 
-        public static UserMiddle RegistrateUser(UserBase userBase)
-        {
-            UserMiddle user = new();
+//        public static ProtoUser RegistrateUser(UserBase userBase)
+//        {
+//            ProtoUser user = new();
 
-            user.ChangeName();
-            user.ChangePassword();
-            user.ChangeMail();
-            userBase.AddItem(user);
+//            user.ChangeName();
+//            user.ChangePassword();
+//            user.ChangeMail();
+//            userBase.AddItem(user);
 
-            return user;
-        }
+//            return user;
+//        }
 
-        public static UserMiddle LogInUser(UserBase userBase)
-        {
-            Clear();
-            UserMiddle user = new();
+//        public static ProtoUser LogInUser(UserBase userBase)
+//        {
+//            Clear();
+//            ProtoUser user = new();
 
-            user.ChangeMail();
-            user.ChangePassword();
+//            user.ChangeMail();
+//            user.ChangePassword();
 
-            user = userBase.GetItem(user);
+//            ProtoUser = userBase.GetItem(user);
 
-            if (user != null) { return user; }
+//            if (user != null) { return user; }
 
-            WriteLine("Данный пользователь не зарегистрирован.");
-            ReadKey();
+//            WriteLine("Данный пользователь не зарегистрирован.");
+//            ReadKey();
 
-            return null;
-        }
+//            return null;
+//        }
 
-        public static UserAdmin LogInAdmin(UserBase userBase)
-        {
-            UserMiddle user = LogInUser(userBase);
+//        public static UserAdmin LogInAdmin(UserBase userBase)
+//        {
+//            ProtoUser user = LogInUser(userBase);
 
-            return (user.Mail == "admin@mail.com") ? new() { Name = "Администратор" } : null;
-        }
-    }
-}
+//            return (user.Mail == "admin@mail.com") ? new() { Name = "Администратор" } : null;
+//        }
+//    }
+//}
