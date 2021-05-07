@@ -14,7 +14,7 @@ namespace ChatBot_DB
         {
             if (ReadItem(rack) == null)
             {
-                SqlCommand query = new($"INSERT INTO {TableId} VALUES" +
+                SqlCommand query = new($"INSERT INTO [{TableId}] VALUES" +
                                        $"('{rack.Name}'," +
                                        $"{1})");
 
@@ -26,7 +26,7 @@ namespace ChatBot_DB
 
         public Rack ReadItem(Rack rack)
         {
-            SqlCommand query = new($"SELECT * FROM {TableId} WHERE Name='{rack.Name}'");
+            SqlCommand query = new($"SELECT * FROM [{TableId}] WHERE Name='{rack.Name}'");
 
             using SqlDataReader reader = QueryDB.ReadItem(query);
 
@@ -40,7 +40,7 @@ namespace ChatBot_DB
 
         public void UpdateItem(Rack rack)
         {
-            SqlCommand query = new($"UPDATE {TableId} SET " +
+            SqlCommand query = new($"UPDATE [{TableId}] SET " +
                                    $"Name='{rack.Name}'," +
                                    $"Amount={rack.Amount}" +
                                    $"WHERE Name='{rack.Name}'");
@@ -59,7 +59,7 @@ namespace ChatBot_DB
                     rackDB.Amount--;
                     UpdateItem(rackDB);
                 }
-                SqlCommand query = new($"DELETE {TableId} WHERE Name='{rack.Name}'");
+                SqlCommand query = new($"DELETE [{TableId}] WHERE Name='{rack.Name}'");
                 QueryDB.ExecuteNonQuery(query);
             }
         }

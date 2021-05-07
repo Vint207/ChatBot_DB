@@ -19,8 +19,8 @@ namespace ChatBot_DB
                 $"{user.Money}," +
                 $"{user.LastTransaction}," +
                 $"'{user.UserID}'," +
-                $"'{user.OrdersTableId}'," +
-                $"'{user.BinTableId}')");
+                $"'{user.ArchiveId}'," +
+                $"'{user.BinId}')");
 
             QueryDB.ExecuteNonQuery(query);
         }
@@ -53,8 +53,8 @@ namespace ChatBot_DB
                 user.Money = (double)reader["Money"];
                 user.LastTransaction = (double)reader["LastTransaction"];
                 user.UserID = (Guid)reader["UserID"];
-                user.OrdersTableId = (Guid)reader["OrdersTableId"];
-                user.BinTableId = (Guid)reader["BinTableId"];
+                user.ArchiveId = (Guid)reader["ArchiveId"];
+                user.BinId = (Guid)reader["BinId"];
             }
             return user;
         }
@@ -83,8 +83,8 @@ namespace ChatBot_DB
                     Money = (double)reader["Money"],
                     LastTransaction = (double)reader["LastTransaction"],
                     UserID = (Guid)reader["UserID"],
-                    OrdersTableId = (Guid)reader["OrdersTableId"],
-                    BinTableId = (Guid)reader["BinTableId"]
+                    ArchiveId = (Guid)reader["ArchiveId"],
+                    BinId = (Guid)reader["BinId"]
                 });
             }
             return users;
@@ -107,8 +107,8 @@ namespace ChatBot_DB
                                    $"[Money] float DEFAULT 0 CHECK([Money] >= 0)," +
                                    $"LastTransaction float DEFAULT 0 CHECK(LastTransaction >= 0)," +
                                    $"UserID uniqueidentifier null," +
-                                   $"OrdersTableId uniqueidentifier null," +
-                                   $"BinTableId uniqueidentifier null" +
+                                   $"ArchiveId uniqueidentifier null," +
+                                   $"BinId uniqueidentifier null" +
                                    $")");
 
             QueryDB.ExecuteNonQuery(query);

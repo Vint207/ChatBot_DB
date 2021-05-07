@@ -33,13 +33,17 @@ namespace ChatBot_DB
 
 
             User user = usersDB.ReadItem(new() { Mail = "sasha@a.aa" });
+          
+         
+
+          
 
             user.GetInfo();
 
             Console.ReadKey();
 
-            user.CreateBinTable();
-            user.CreateOrdersTable();
+
+
             user.OpenOrder();
 
 

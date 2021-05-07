@@ -9,8 +9,8 @@ namespace ChatBot_DB
 
         public bool Status { get; set; }
         public Guid UserID { get; set; }
-        public Guid OrdersTableId { get; set; }
-        public Guid BinTableId { get; set; }
+        public Guid ArchiveId { get; set; }
+        public Guid BinId { get; set; }
 
         [Required(ErrorMessage = "Поле не может быть пустым. Введи новое имя:")]
         [RegularExpression(@"^[a-z\nA-Z\nа-я\nА-Я]{1,12}$", ErrorMessage = "Некорректный формат имени. Введи новое имя:")]

@@ -12,30 +12,34 @@ namespace ChatBot_DB
             //OrderBase.baseChangedEvent += EventMethods.OrderBaseChanged;
         }
 
-        public void ChangeName()
+        public void ChangeName(Guid usersTableId)
         {
             Clear();
+            UsersDB users = new() { TableId = usersTableId };
+
             WriteLine($"Введи имя (Используй только буквы):");
 
             Validation.TryValidate(this, nameof(Name));
 
-            new UsersDB().UpdateItem(this);
+            users.UpdateItem(this);
         }
 
-        public void ChangePassword()
+        public void ChangePassword(Guid usersTableId)
         {
             Clear();
+            UsersDB users = new() { TableId = usersTableId };
+
             WriteLine("Введи пароль аккаунта (6-12 букв латинского алфавита или цифр):");
 
             Validation.TryValidate(this, nameof(Password));
 
-            new UsersDB().UpdateItem(this);
+            users.UpdateItem(this);
         }
 
-        public void ChangeMail()
+        public void ChangeMail(Guid usersTableId)
         {
             Clear();
-            UsersDB dB = new();
+            UsersDB users = new() { TableId = usersTableId };
 
             WriteLine("Введи адрес электронной почты:");
 
@@ -43,17 +47,19 @@ namespace ChatBot_DB
             {
                 Validation.TryValidate(this, nameof(Mail));
 
-                if (dB.ReadItem(this) == null) { break; }
+                if (users.ReadItem(this) == null) { break; }
 
                 WriteLine("Данный адрес электронной почты уже зарегистрирован. Попробуй другой:");
                 ReadKey();
             }
-            dB.UpdateItem(this);
+            users.UpdateItem(this);
         }
 
-        public void PutMoney()
+        public void PutMoney(Guid usersTableId)
         {
             Clear();
+            UsersDB users = new() { TableId = usersTableId };
+
             WriteLine($"На счету {Name} {Money} р");
 
             WriteLine($"Введи сумму для перевода:");
@@ -62,11 +68,13 @@ namespace ChatBot_DB
 
             Money += LastTransaction;
 
-            new UsersDB().UpdateItem(this);
+            users.UpdateItem(this);
 
             WriteLine($"Баланс {Name} составляет {Money} р");
             ReadKey();
         }
+
+        
 
         public void PayOrder()
         {
@@ -82,40 +90,6 @@ namespace ChatBot_DB
 
             //   ReadKey();
             //}
-        }
-
-        public void OpenOrder()
-        {
-            BinDB bin = new() { TableId = BinTableId };
-            CreateOrderTable();
-            OrderDB order = new() { TableId = BinTableId };
-            order.WriteAllItems(bin.ReadAllItems());
-            bin.EmptyBin();
-        }
-
-        public void CreateBinTable()
-        {
-            Guid id = Guid.NewGuid();
-            BinDB bin = new() { TableId = id };
-            BinTableId = id;
-            bin.CreateTable(id);
-        }
-
-        public void CreateOrdersTable()
-        {
-            Guid id = Guid.NewGuid();
-            OrdersDB orders = new() { TableId = id };
-            OrdersTableId = id;
-            orders.CreateTable(id);
-        }
-
-        public void CreateOrderTable()
-        {
-            Guid id = Guid.NewGuid();
-            BinDB bin = new() { TableId = id };         
-            bin.CreateTable(id);
-            OrdersDB orders = new() { TableId = OrdersTableId };
-            //orders.C
         }
     }
 }
