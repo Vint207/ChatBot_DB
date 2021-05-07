@@ -115,7 +115,7 @@ namespace ChatBot_DB
             BinDB bin = new() { TableId = id };         
             bin.CreateTable(id);
             OrdersDB orders = new() { TableId = OrdersTableId };
-            orders.C
+            //orders.C
         }
     }
 }
