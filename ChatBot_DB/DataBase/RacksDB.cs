@@ -62,7 +62,7 @@ namespace ChatBot_DB
 
             if (tempRack != null)
             {
-                if (tempRack.Amount > 0)
+                if (tempRack.Amount > 1)
                 {
                     tempRack.Amount--;
                     UpdateItem(tempRack);

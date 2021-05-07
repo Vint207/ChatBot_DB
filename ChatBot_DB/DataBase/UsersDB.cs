@@ -19,7 +19,11 @@ namespace ChatBot_DB
                 $"{user.LastTransaction}," +
                 $"'{user.UserID}'," +
                 $"'{user.ArchiveId}'," +
-                $"'{user.BinId}')");
+                $"'{user.BinId}'," +
+                $"'{user.LastOrderId}'," +
+                $"'{user.SushiTableID}'," +
+                $"'{user.SushiRacksTableID}'," +
+                $"'{user.UsersTableID}')");
 
             QueryDB.ExecuteNonQuery(query);
         }
@@ -32,7 +36,13 @@ namespace ChatBot_DB
                 $"Mail='{user.Mail}'," +
                 $"Money='{user.Money}'," +
                 $"LastTransaction='{user.LastTransaction}'," +
-                $"UserID='{user.UserID}'" +
+                $"UserID='{user.UserID}'," +
+                $"ArchiveId='{user.ArchiveId}'," +
+                $"BinId='{user.BinId}'," +
+                $"LastOrderId='{user.LastOrderId}'," +
+                $"SushiTableID='{user.SushiTableID}'," +
+                $"SushiRacksTableID='{user.SushiRacksTableID}'," +
+                $"UsersTableID='{user.UsersTableID}'" +
                 $"WHERE UserID='{user.UserID}'");
 
             QueryDB.ExecuteNonQuery(query);
@@ -58,6 +68,10 @@ namespace ChatBot_DB
                 tempUser.UserID = (Guid)reader["UserID"];
                 tempUser.ArchiveId = (Guid)reader["ArchiveId"];
                 tempUser.BinId = (Guid)reader["BinId"];
+                tempUser.LastOrderId = (Guid)reader["LastOrderId"];
+                tempUser.SushiTableID = (Guid)reader["SushiTableID"];
+                tempUser.SushiRacksTableID = (Guid)reader["SushiRacksTableID"];
+                tempUser.UsersTableID = (Guid)reader["UsersTableID"];
             }
             reader.Close();
             return tempUser;
@@ -119,7 +133,11 @@ namespace ChatBot_DB
                                    $"LastTransaction float DEFAULT 0 CHECK(LastTransaction >= 0)," +
                                    $"UserID uniqueidentifier null," +
                                    $"ArchiveId uniqueidentifier null," +
-                                   $"BinId uniqueidentifier null" +
+                                   $"BinId uniqueidentifier null," +
+                                   $"LastOrderId uniqueidentifier null," +
+                                   $"SushiTableID uniqueidentifier null," +
+                                   $"SushiRacksTableID uniqueidentifier null," +
+                                   $"UsersTableID uniqueidentifier null" +
                                    $")");
 
             QueryDB.ExecuteNonQuery(query);

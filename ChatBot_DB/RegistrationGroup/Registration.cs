@@ -41,8 +41,9 @@ namespace ChatBot_DB
             WriteLine($"Введи пароль:");
             Validation.TryValidate(user, nameof(user.Password));
 
-            if (users.ReadItem(user) != null)
-            { return user; }
+            User tempUser = users.ReadItem(user);
+
+            if (tempUser != null) {  return tempUser; }
 
             WriteLine("Данный пользователь не зарегистрирован.");
             ReadKey();
