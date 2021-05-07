@@ -14,10 +14,13 @@ namespace ChatBot_DB
             user.SushiTableID = sushiTableId;
             user.SushiRacksTableID = sushiRacksTableId;
 
-            ArchiveDB archive = new() { TableId = Guid.NewGuid() };
-            user.ArchiveId = archive.TableId;
+            ArchiveDB archive = new();            
+            archive.CreateTable(Guid.NewGuid());
+            user.ArchiveId = archive.TableId;       
 
-            BinDB bin = new() { TableId = Guid.NewGuid(), SushiTableId = sushiTableId };
+            BinDB bin = new();
+            bin.SushiTableId = sushiTableId;
+            bin.CreateTable(Guid.NewGuid());
             user.BinId = bin.TableId;
       
             user.CreateUser();

@@ -13,7 +13,6 @@ namespace ChatBot_DB
 
         public void GetInfo()
         {
-            Console.WriteLine();
             Console.WriteLine($"- {Name}. Цена: {Price} р.");
         }
     }

@@ -16,7 +16,7 @@ namespace ChatBot_DB
                 SqlConnection connection = new(_server);
                 connection.Open();
                 query.Connection = connection;
-                SqlDataReader reader = query.ExecuteReader(CommandBehavior.CloseConnection);
+                SqlDataReader reader = query.ExecuteReader(CommandBehavior.CloseConnection);              
                 return reader;
             }
             catch (SqlException ex)

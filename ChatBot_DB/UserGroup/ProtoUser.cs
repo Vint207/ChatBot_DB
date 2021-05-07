@@ -40,7 +40,6 @@ namespace ChatBot_DB
         public void GetInfo()
         {
             Clear();
-            WriteLine();
             WriteLine($"Данные пользователя:");
             WriteLine($"Имя: {Name}\nПароль: {Password}\nБаланс: {Money} р\nПочта: {Mail}");
             ReadKey();

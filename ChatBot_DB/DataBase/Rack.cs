@@ -10,7 +10,7 @@ namespace ChatBot_DB
     {
 
         public string Name { get; set; }
-        public int Amount { get; set; } = 0;
+        public int Amount { get; set; } = 1;
 
         public void GetInfo() =>
             Console.WriteLine($"- {Name}. Количество {Amount} шт.");

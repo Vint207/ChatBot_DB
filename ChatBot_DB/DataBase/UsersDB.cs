@@ -9,7 +9,6 @@ namespace ChatBot_DB
 
         public Guid TableId { get; set; }
 
-
         public void CreateItem(User user)
         {
             SqlCommand query = new($"INSERT INTO [{TableId}] VALUES" +
@@ -46,20 +45,22 @@ namespace ChatBot_DB
             using SqlDataReader reader = QueryDB.ReadItem(query);
 
             if (!reader.HasRows) { return null; }
-      
+
+            User tempUser = new();
 
             while (reader.Read())
             {
-                user.Name = (string)reader["Name"];
-                user.Password = (string)reader["Password"];
-                user.Mail = (string)reader["Mail"];
-                user.Money = (double)reader["Money"];
-                user.LastTransaction = (double)reader["LastTransaction"];
-                user.UserID = (Guid)reader["UserID"];
-                user.ArchiveId = (Guid)reader["ArchiveId"];
-                user.BinId = (Guid)reader["BinId"];
+                tempUser.Name = (string)reader["Name"];
+                tempUser.Password = (string)reader["Password"];
+                tempUser.Mail = (string)reader["Mail"];
+                tempUser.Money = (double)reader["Money"];
+                tempUser.LastTransaction = (double)reader["LastTransaction"];
+                tempUser.UserID = (Guid)reader["UserID"];
+                tempUser.ArchiveId = (Guid)reader["ArchiveId"];
+                tempUser.BinId = (Guid)reader["BinId"];
             }
-            return user;
+            reader.Close();
+            return tempUser;
         }
 
         public void DeleteItem(User user)
@@ -95,10 +96,15 @@ namespace ChatBot_DB
 
         public void GetAllItemsInfo()
         {
-            List<User> items = new();
+            List<User> items = ReadAllItems();
 
-            foreach (var item in items)
-            { item?.GetInfo(); }
+            if (items != null)
+            {
+                foreach (var item in items)
+                { item?.GetInfo(); }
+                return;
+            }
+            Console.WriteLine("Список пуст");
         }
 
         public void CreateTable(Guid id)

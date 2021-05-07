@@ -19,7 +19,7 @@ namespace ChatBot_DB
             {
                 Clear();
 
-                switch (ConsoleWork.Choose(new List<string>() { "Регистрация", "Вход-пользователь", "Вход-гость", "Вход-администратор" }))
+                switch (ConsoleWork.Choose(new List<string>() { "Регистрация", "Вход-пользователь" }))
                 {
                     case "Регистрация":
                         UserMenu(admin, admin.AddUserToUsersTable());
@@ -51,7 +51,7 @@ namespace ChatBot_DB
                         user.PutMoney();
                         break;
                     case "Меню-суши":
-                        new SushiRacksDB() { TableId = user.SushiRacksTableID }.GetAllItemsInfo();
+                        user.GetAllSushisInfo();
                         break;
                     case "Меню-корзины":
                         BinMenu(user);
@@ -176,6 +176,6 @@ namespace ChatBot_DB
                         return;
                 }
             }
-        }    
+        }
     }
 }

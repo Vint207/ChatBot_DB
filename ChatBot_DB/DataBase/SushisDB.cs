@@ -47,6 +47,7 @@ namespace ChatBot_DB
                 tempSushi.Price = (double)reader["Price"];
                 tempSushi.ID = (Guid)reader["ID"];
             }
+            reader.Close();
             return tempSushi;
         }
 
@@ -78,10 +79,15 @@ namespace ChatBot_DB
 
         public void GetAllItemsInfo()
         {
-            List<Sushi> items = new();
+            List<Sushi> items = ReadAllItems();
 
-            foreach (var item in items)
-            { item?.GetInfo(); }
+            if (items != null)
+            {
+                foreach (var item in items)
+                { item?.GetInfo(); }
+                return;
+            }
+            Console.WriteLine("Список пуст");
         }
 
         public void CreateTable(Guid id)

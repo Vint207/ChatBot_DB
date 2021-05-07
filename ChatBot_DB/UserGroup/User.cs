@@ -8,7 +8,7 @@ namespace ChatBot_DB
     {
 
         public User()
-        {            
+        {
             //Bin.baseChangedEvent += EventMethods.BinBaseChanged;
             //OrderBase.baseChangedEvent += EventMethods.OrderBaseChanged;
         }
@@ -102,6 +102,14 @@ namespace ChatBot_DB
             ReadKey();
         }
 
+        public void GetAllSushisInfo()
+        {
+            Clear();
+            SushisDB sushis = new() { TableId = SushiTableID };
+            sushis.GetAllItemsInfo();
+            ReadKey();
+        }
+
         //public void PayOrder()
         //{
         //    //if (OrderBase.GetLastOrder() is Order order)
@@ -120,9 +128,9 @@ namespace ChatBot_DB
 
         public void OpenOrder()
         {
-            BinDB bin = new() { TableId = BinId };
-            ArchiveDB archive = new() { TableId = ArchiveId };
-            OrderDB order = new() { TableId = LastOrderId };
+            BinDB bin = new() { TableId = BinId, SushiTableId = SushiTableID };
+            ArchiveDB archive = new() { TableId = ArchiveId};
+            OrderDB order = new() { TableId = LastOrderId, SushiTableId = SushiTableID };
             order?.OpenOrder();
             archive.CreateItem(order);
             order?.WriteAllItems(bin.ReadAllItems());
@@ -147,86 +155,121 @@ namespace ChatBot_DB
 
         public void GetLastOrderInfo()
         {
-            OrderDB order = new() {TableId = LastOrderId };
+            OrderDB order = new() { TableId = LastOrderId };
             order?.GetAllItemsInfo();
         }
 
         public void AddItemToBin()
         {
             SushisDB sushis = new() { TableId = SushiTableID };
-            SushiRacksDB sushiRacks = new() { TableId = SushiRacksTableID };
-            BinDB bin = new() { TableId = BinId };
+            SushiRacksDB sushiRacks = new() { TableId = SushiRacksTableID, SushiTableId = SushiTableID };
+            BinDB bin = new() { TableId = BinId, SushiTableId = SushiTableID };
             List<string> sushiName = new();
-            List<Sushi> items = new();
+            List<Rack> items;
+            Rack sushiRack = new();
+            Sushi sushi;
 
             while (true)
             {
                 Clear();
                 WriteLine($"{Name}, Выбери суши для добавления в корзину.");
                 WriteLine();
-             
-                foreach (var item in items)
-                { sushiName?.Add(item.Name); }
 
-                Sushi sushi = sushis.ReadItem(new() { Name = ConsoleWork.Choose(sushiName) });
+                items = sushiRacks.ReadAllItems();
 
-                Rack sushiRack = new() { Name = sushi.Name };
+                if (items != null)
+                {
+                    sushiName.Clear();
 
-                bin.CreateItem(sushiRack);
-                sushiRacks.DeleteItem(sushiRack);
+                    foreach (var item in items)
+                    { sushiName?.Add($"{item.Name}. Цена {sushis.ReadItem(new() { Name = item.Name }).Price} р. Количество {item.Amount} шт."); }
 
-                WriteLine();
-                bin.GetAllItemsInfo();
+                    sushi = sushis.ReadItem(new() { Name = ConsoleWork.Choose(sushiName) });
 
+                    sushiRack.Name = sushi.Name;                  
+
+                    bin.CreateItem(sushiRack);
+                    sushiRacks.DeleteItem(sushiRack);
+               
+                    GetItemsInfoFromBin();
+                }
+                if (sushiRacks.GetPrice() <= 0) 
+                {
+                    Clear();
+                    WriteLine($"В магазин не осталось суши");
+                    ReadKey();
+                    return;
+                }
                 WriteLine();
                 WriteLine($"{Name}, хочешь заказать еще суши?");
 
-                if (!ConsoleWork.Choose()) { break; }
+                if (!ConsoleWork.Choose()) { return; }
             }
         }
 
         public void DeleteItemFromBin()
         {
             SushisDB sushis = new() { TableId = SushiTableID };
-            SushiRacksDB sushiRacks = new() { TableId = SushiRacksTableID };
-            BinDB bin = new() { TableId = BinId };
+            SushiRacksDB sushiRacks = new() { TableId = SushiRacksTableID, SushiTableId = SushiTableID };
+            BinDB bin = new() { TableId = BinId, SushiTableId = SushiTableID };
             List<string> sushiName = new();
-            List<Sushi> items = new();
+            List<Rack> items;
+            Rack sushiRack = new() { Amount = 0 };
+            Sushi sushi;
 
-            while (bin.GetPrice() > 0)
+            while (true)
             {
                 Clear();
                 WriteLine($"{Name}, Выбери суши, который хочешь удалить из корзины:");
                 WriteLine();
 
-                foreach (var item in items)
-                { sushiName?.Add(item.Name); }
+                items = bin.ReadAllItems();
 
-                Sushi sushi = sushis.ReadItem(new() { Name = ConsoleWork.Choose(sushiName) });
+                if (items != null)
+                {
+                    sushiName.Clear();
 
-                Rack sushiRack = new() { Name = sushi.Name };
+                    foreach (var item in items)
+                    { sushiName?.Add($"{item.Name}. Цена {sushis.ReadItem(new() { Name = item.Name }).Price} р. Количество {item.Amount} шт."); }
 
-                bin.CreateItem(sushiRack);
-                sushiRacks.DeleteItem(sushiRack);
+                    sushi = sushis.ReadItem(new() { Name = ConsoleWork.Choose(sushiName) });
 
-                WriteLine();
-                bin.GetAllItemsInfo();
+                    sushiRack.Name = sushi.Name;
+                    bin.DeleteItem(sushiRack);
+                    sushiRacks.CreateItem(sushiRack);
+
+                    GetItemsInfoFromBin();
+                }
+                if (bin.GetPrice() <= 0)
+                {
+                    Clear();
+                    WriteLine($"Корзина пуста");
+                    ReadKey();
+                    return; 
+                }
 
                 WriteLine();
                 WriteLine($"{Name}, хочешь удалить еще суши?");
 
-                if (!ConsoleWork.Choose()) { break; }
+                if (!ConsoleWork.Choose()) { return; }
             }
-            Clear();
-            WriteLine($"Корзина пуста.");
-            ReadKey();
         }
 
         public void GetItemsInfoFromBin()
         {
             Clear();
-            BinDB bin = new() { TableId = BinId };
-            bin.GetAllItemsInfo();
+            BinDB bin = new() { TableId = BinId, SushiTableId = SushiTableID };
+            double binPrice = bin.GetPrice();
+
+            if (binPrice > 0)
+            {
+                WriteLine("Состав корзины");
+                bin.GetAllItemsInfo();
+                WriteLine($"Стоимость товаров в корзине {binPrice} р.");
+                ReadKey();
+                return;
+            }
+            WriteLine("Корзина пуста");
             ReadKey();
         }
 
@@ -246,7 +289,7 @@ namespace ChatBot_DB
 
         public void CreateUserOrderTable()
         {
-            OrderDB order = new();
+            OrderDB order = new() { SushiTableId = SushiTableID };
             order.CreateTable(Guid.NewGuid());
             ArchiveDB archive = new() { TableId = ArchiveId };
             archive.CreateItem(order);

@@ -40,7 +40,7 @@ namespace ChatBot_DB
             UsersDB users = new() { TableId = UsersTableID };
             User user = Registration.LogInUser(UsersTableID);
 
-            if (user != null) { user.GetInfo(); }
+            //if (user != null) { user.GetInfo(); }
             ReadKey();
             return user;
         }

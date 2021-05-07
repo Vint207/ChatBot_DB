@@ -12,16 +12,19 @@ namespace ChatBot_DB
 
         public void CreateItem(Rack rack)
         {
-            if (ReadItem(rack) == null)
+            Rack tempRack = ReadItem(rack);
+
+            if (tempRack == null)
             {
                 SqlCommand query = new($"INSERT INTO [{TableId}] VALUES" +
                                        $"('{rack.Name}'," +
-                                       $"{1})");
+                                       $"{rack.Amount})");
 
                 QueryDB.ExecuteNonQuery(query);
+                return;
             }
-            rack.Amount++;
-            UpdateItem(rack);
+            tempRack.Amount++;
+            UpdateItem(tempRack);
         }
 
         public Rack ReadItem(Rack rack)
@@ -30,14 +33,17 @@ namespace ChatBot_DB
 
             using SqlDataReader reader = QueryDB.ReadItem(query);
 
-            if (!reader.HasRows) { return null; }   
+            if (!reader.HasRows) { return null; }
+
+            Rack tempRack = new();
 
             while (reader.Read())
             {
-                rack.Name = (string)reader["Name"];
-                rack.Amount = (int)reader["Amount"];
+                tempRack.Name = (string)reader["Name"];
+                tempRack.Amount = (int)reader["Amount"];
             }
-            return rack;
+            reader.Close();
+            return tempRack;
         }
 
         public void UpdateItem(Rack rack)
@@ -52,14 +58,15 @@ namespace ChatBot_DB
 
         public void DeleteItem(Rack rack)
         {
-            Rack rackDB = ReadItem(rack);
+            Rack tempRack = ReadItem(rack);
 
-            if (rackDB != null)
+            if (tempRack != null)
             {
-                if (rackDB.Amount > 0)
+                if (tempRack.Amount > 0)
                 {
-                    rackDB.Amount--;
-                    UpdateItem(rackDB);
+                    tempRack.Amount--;
+                    UpdateItem(tempRack);
+                    return;
                 }
                 SqlCommand query = new($"DELETE [{TableId}] WHERE Name='{rack.Name}'");
                 QueryDB.ExecuteNonQuery(query);
@@ -94,24 +101,27 @@ namespace ChatBot_DB
 
         public void GetAllItemsInfo()
         {
-            List<Rack> items = new();
+            List<Rack> items = ReadAllItems();
 
-            foreach (var item in items)
-            { item?.GetInfo(); }
-
-            if (items.Count == 0)
-            { Console.WriteLine("Список пуст"); }
+            if (items!=null)
+            {
+                foreach (var item in items)
+                { item?.GetInfo(); }              
+                return;
+            }
         }
 
         public double GetPrice()
         {
-            SushisDB sushiDB = new();
+            SushisDB sushiDB = new() { TableId = SushiTableId };
             double result = 0;
-            List<Rack> items = new();
+            List<Rack> items = ReadAllItems();
 
-            foreach (var item in items)
-            { result += sushiDB.ReadItem(new() { Name = item.Name }).Price * item.Amount; }
-
+            if (items!=null)
+            {
+                foreach (var item in items)
+                { result += sushiDB.ReadItem(new() { Name = item.Name }).Price * item.Amount; }
+            }
             return result;
         }
 
