@@ -6,25 +6,28 @@ namespace ChatBot_DB
     class Registration
     {
 
-        public static User RegistrateUser(Guid userTableId)
+        public static User RegistrateUser(Guid userTableId, Guid sushiTableId, Guid sushiRacksTableId)
         {
             User user = new();
+            user.UserID = Guid.NewGuid();
+            user.UsersTableID = userTableId;          
+            user.SushiTableID = sushiTableId;
+            user.SushiRacksTableID = sushiRacksTableId;
 
-            user.ChangeMail(userTableId);
+            ArchiveDB archive = new() { TableId = Guid.NewGuid() };
+            user.ArchiveId = archive.TableId;
 
-            Clear();
-            WriteLine($"Введи имя:");
-            Validation.TryValidate(user, nameof(user.Name));        
-         
-            Clear();
-            WriteLine($"Введи пароль:");
-            Validation.TryValidate(user, nameof(user.Password));
+            BinDB bin = new() { TableId = Guid.NewGuid(), SushiTableId = sushiTableId };
+            user.BinId = bin.TableId;
+      
+            user.CreateUser();
 
             return user;
         }
 
-        public static User LogInUser()
+        public static User LogInUser(Guid userTableId)
         {
+            UsersDB users = new() { TableId = userTableId };
             User user = new();
 
             Clear();
@@ -35,9 +38,8 @@ namespace ChatBot_DB
             WriteLine($"Введи пароль:");
             Validation.TryValidate(user, nameof(user.Password));
 
-            //User = userBase.GetItem(user);
-
-            if (user != null) { return user; }
+            if (users.ReadItem(user) != null)
+            { return user; }
 
             WriteLine("Данный пользователь не зарегистрирован.");
             ReadKey();

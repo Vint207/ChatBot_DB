@@ -30,6 +30,8 @@ namespace ChatBot_DB
 
             using SqlDataReader reader = QueryDB.ReadItem(query);
 
+            if (!reader.HasRows) { return null; }   
+
             while (reader.Read())
             {
                 rack.Name = (string)reader["Name"];
@@ -73,7 +75,7 @@ namespace ChatBot_DB
             List<Rack> racks = new();
 
             if (!reader.HasRows) { return null; }
-          
+
             while (reader.Read())
             { racks.Add(new() { Name = (string)reader["Name"], Amount = (int)reader["Amount"] }); }
 
@@ -84,7 +86,7 @@ namespace ChatBot_DB
         {
             SqlCommand query = new($"SELECT * FROM [{TableId}]");
 
-            using SqlDataReader reader = QueryDB.ReadItem(query);         
+            using SqlDataReader reader = QueryDB.ReadItem(query);
 
             foreach (var item in racks)
             { CreateItem(item); }
@@ -92,16 +94,22 @@ namespace ChatBot_DB
 
         public void GetAllItemsInfo()
         {
-            foreach (var item in ReadAllItems())
+            List<Rack> items = new();
+
+            foreach (var item in items)
             { item?.GetInfo(); }
+
+            if (items.Count == 0)
+            { Console.WriteLine("Список пуст"); }
         }
 
         public double GetPrice()
         {
             SushisDB sushiDB = new();
             double result = 0;
+            List<Rack> items = new();
 
-            foreach (var item in ReadAllItems())
+            foreach (var item in items)
             { result += sushiDB.ReadItem(new() { Name = item.Name }).Price * item.Amount; }
 
             return result;

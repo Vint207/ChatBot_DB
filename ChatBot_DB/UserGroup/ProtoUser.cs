@@ -11,6 +11,10 @@ namespace ChatBot_DB
         public Guid UserID { get; set; }
         public Guid ArchiveId { get; set; }
         public Guid BinId { get; set; }
+        public Guid LastOrderId { get; set; }
+        public Guid SushiTableID { get; set; }
+        public Guid SushiRacksTableID { get; set; }
+        public Guid UsersTableID { get; set; }
 
         [Required(ErrorMessage = "Поле не может быть пустым. Введи новое имя:")]
         [RegularExpression(@"^[a-z\nA-Z\nа-я\nА-Я]{1,12}$", ErrorMessage = "Некорректный формат имени. Введи новое имя:")]
@@ -35,11 +39,11 @@ namespace ChatBot_DB
 
         public void GetInfo()
         {
-            //Clear();
+            Clear();
             WriteLine();
             WriteLine($"Данные пользователя:");
             WriteLine($"Имя: {Name}\nПароль: {Password}\nБаланс: {Money} р\nПочта: {Mail}");
-            //ReadKey();
+            ReadKey();
         }
     }
 }

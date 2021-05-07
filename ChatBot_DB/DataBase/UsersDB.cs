@@ -33,8 +33,8 @@ namespace ChatBot_DB
                 $"Mail='{user.Mail}'," +
                 $"Money='{user.Money}'," +
                 $"LastTransaction='{user.LastTransaction}'," +
-                $"ID='{user.UserID}'" +
-                $"WHERE ID='{user.UserID}'");
+                $"UserID='{user.UserID}'" +
+                $"WHERE UserID='{user.UserID}'");
 
             QueryDB.ExecuteNonQuery(query);
         }
@@ -44,6 +44,9 @@ namespace ChatBot_DB
             SqlCommand query = new($"SELECT * FROM [{TableId}] WHERE Mail='{user.Mail}'");
 
             using SqlDataReader reader = QueryDB.ReadItem(query);
+
+            if (!reader.HasRows) { return null; }
+      
 
             while (reader.Read())
             {
@@ -92,7 +95,9 @@ namespace ChatBot_DB
 
         public void GetAllItemsInfo()
         {
-            foreach (var item in ReadAllItems())
+            List<User> items = new();
+
+            foreach (var item in items)
             { item?.GetInfo(); }
         }
 

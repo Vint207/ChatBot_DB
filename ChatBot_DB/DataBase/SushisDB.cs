@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    class SushisDB
+    public class SushisDB
     {
 
         public Guid TableId { get; set; }
@@ -37,8 +37,10 @@ namespace ChatBot_DB
 
             using SqlDataReader reader = QueryDB.ReadItem(query);
 
-            Sushi tempSushi = null;
+            Sushi tempSushi = new();
 
+            if (!reader.HasRows) { return null; }
+        
             while (reader.Read())
             {
                 tempSushi.Name = (string)reader["Name"];
@@ -76,7 +78,9 @@ namespace ChatBot_DB
 
         public void GetAllItemsInfo()
         {
-            foreach (var item in ReadAllItems())
+            List<Sushi> items = new();
+
+            foreach (var item in items)
             { item?.GetInfo(); }
         }
 
