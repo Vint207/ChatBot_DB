@@ -7,7 +7,7 @@ namespace ChatBot_DB
     class QueryDB
     {
 
-        static string _server = "Server=DESKTOP-J321LBP;Database=ChatBot;Trusted_Connection=True;";
+        static string _server = "Server=BEST-KOMP;Database=ChatBot;Trusted_Connection=True;";
 
         public static SqlDataReader ReadItem(SqlCommand query)
         {

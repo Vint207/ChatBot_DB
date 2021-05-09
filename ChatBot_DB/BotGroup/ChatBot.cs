@@ -97,7 +97,7 @@ namespace ChatBot_DB
                 switch (ConsoleWork.Choose(new List<string>() { "Просмотеть-корзину", "Добавить-суши", "Удалить-суши", "Назад" }))
                 {
                     case "Просмотеть-корзину":
-                        user.GetItemsInfoFromBin();
+                        new BinDB() { TableId = user.BinId, SushiTableId = user.SushiTableID }.GetBinInfo(); 
                         break;
                     case "Добавить-суши":
                         user.AddItemToBin();
@@ -123,9 +123,9 @@ namespace ChatBot_DB
                         user.OpenOrder();
                         break;
                     case "Просмотреть-заказ":
-                        user.GetLastOrderInfo();
+                        new ArchiveDB() { TableId = user.ArchiveId }.GetOrderInfo(user.LastOrderId);
                         break;
-                    case "Оплатить-заказ":
+                    case "Оплатить-заказ":       
                         user.PayOrder();
                         break;
                     case "Назад":
@@ -145,7 +145,7 @@ namespace ChatBot_DB
                 switch (ConsoleWork.Choose(new List<string>() { "Меню-суши", "Выйти" }))
                 {
                     case "Меню-суши":
-                        new SushiRacksDB() { TableId = guest.SushiRacksTableID }.GetAllItemsInfo();
+                        new SushiRacksDB() { TableId = guest.SushiRacksTableID }.GetSushiInfo();
                         break;
                     case "Выйти":
                         return;

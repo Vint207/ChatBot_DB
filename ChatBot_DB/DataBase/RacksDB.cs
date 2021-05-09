@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    public class RacksDB
+    public class RacksDB //: IDisposable
     {
 
         public Guid TableId { get; set; }
@@ -75,18 +75,22 @@ namespace ChatBot_DB
 
         public List<Rack> ReadAllItems()
         {
-            SqlCommand query = new($"SELECT * FROM [{TableId}]");
+            if (TableId!=default)
+            {
+                SqlCommand query = new($"SELECT * FROM [{TableId}]");
 
-            using SqlDataReader reader = QueryDB.ReadItem(query);
+                using SqlDataReader reader = QueryDB.ReadItem(query);
 
-            List<Rack> racks = new();
+                List<Rack> racks = new();
 
-            if (!reader.HasRows) { return null; }
+                if (!reader.HasRows) { return null; }
 
-            while (reader.Read())
-            { racks.Add(new() { Name = (string)reader["Name"], Amount = (int)reader["Amount"] }); }
+                while (reader.Read())
+                { racks.Add(new() { Name = (string)reader["Name"], Amount = (int)reader["Amount"] }); }
 
-            return racks;
+                return racks;
+            }
+            return null;
         }
 
         public void WriteAllItems(List<Rack> racks)
@@ -95,20 +99,10 @@ namespace ChatBot_DB
 
             using SqlDataReader reader = QueryDB.ReadItem(query);
 
+            if (racks == null) { return; }         
+
             foreach (var item in racks)
             { CreateItem(item); }
-        }
-
-        public void GetAllItemsInfo()
-        {
-            List<Rack> items = ReadAllItems();
-
-            if (items!=null)
-            {
-                foreach (var item in items)
-                { item?.GetInfo(); }              
-                return;
-            }
         }
 
         public double GetPrice()
@@ -137,6 +131,12 @@ namespace ChatBot_DB
                                    $"ON DELETE CASCADE" +
                                    $")");
 
+            QueryDB.ExecuteNonQuery(query);
+        }
+
+        public void ClearTable()
+        {
+            SqlCommand query = new($"DELETE [{TableId}]");
             QueryDB.ExecuteNonQuery(query);
         }
 
