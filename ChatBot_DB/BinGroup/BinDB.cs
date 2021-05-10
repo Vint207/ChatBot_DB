@@ -13,8 +13,7 @@ namespace ChatBot_DB
             SushiRacksTable sushiRacks = new() { TableId = user.SushiRacksTableID, SushiTableId = user.SushiTableID };
             TableId = user.BinId;
             SushiTableId = user.SushiTableID;
-
-            //BinDB bin = new() { TableId = user.BinId, SushiTableId = user.SushiTableID };
+            
             List<string> sushiName = new();
             List<Rack> items;
             Rack sushiRack = new();
@@ -64,8 +63,7 @@ namespace ChatBot_DB
             SushiRacksTable sushiRacks = new() { TableId = user.SushiRacksTableID, SushiTableId = user.SushiTableID };
             TableId = user.BinId;
             SushiTableId = user.SushiTableID;
-
-            //BinDB bin = new() { TableId = user.BinId, SushiTableId = user.SushiTableID };
+           
             List<string> sushiName = new();
             List<Rack> items;
             Rack sushiRack = new() { Amount = 0 };
