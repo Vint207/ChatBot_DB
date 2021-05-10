@@ -12,19 +12,11 @@ namespace ChatBot_DB
 
         public void CreateItem(Rack rack)
         {
-            Rack tempRack = ReadItem(rack);
+            SqlCommand query = new($"INSERT INTO [{TableId}] VALUES" +
+                                   $"('{rack.Name}'," +
+                                   $"{rack.Amount})");
 
-            if (tempRack == null)
-            {
-                SqlCommand query = new($"INSERT INTO [{TableId}] VALUES" +
-                                       $"('{rack.Name}'," +
-                                       $"{rack.Amount})");
-
-                QueryDB.ExecuteNonQuery(query);
-                return;
-            }
-            tempRack.Amount++;
-            UpdateItem(tempRack);
+            QueryDB.ExecuteNonQuery(query);
         }
 
         public Rack ReadItem(Rack rack)
@@ -58,24 +50,13 @@ namespace ChatBot_DB
 
         public void DeleteItem(Rack rack)
         {
-            Rack tempRack = ReadItem(rack);
-
-            if (tempRack != null)
-            {
-                if (tempRack.Amount > 1)
-                {
-                    tempRack.Amount--;
-                    UpdateItem(tempRack);
-                    return;
-                }
-                SqlCommand query = new($"DELETE [{TableId}] WHERE Name='{rack.Name}'");
-                QueryDB.ExecuteNonQuery(query);
-            }
+            SqlCommand query = new($"DELETE [{TableId}] WHERE Name='{rack.Name}'");
+            QueryDB.ExecuteNonQuery(query);
         }
 
         public List<Rack> ReadAllItems()
         {
-            if (TableId!=default)
+            if (TableId != default)
             {
                 SqlCommand query = new($"SELECT * FROM [{TableId}]");
 
@@ -86,8 +67,10 @@ namespace ChatBot_DB
                 if (!reader.HasRows) { return null; }
 
                 while (reader.Read())
-                { racks.Add(new() 
-                { Name = (string)reader["Name"], Amount = (int)reader["Amount"] }); }
+                {
+                    racks.Add(new()
+                    { Name = (string)reader["Name"], Amount = (int)reader["Amount"] });
+                }
 
                 return racks;
             }
@@ -100,7 +83,7 @@ namespace ChatBot_DB
 
             using SqlDataReader reader = QueryDB.ReadItem(query);
 
-            if (racks == null) { return; }         
+            if (racks == null) { return; }
 
             foreach (var item in racks)
             { CreateItem(item); }
@@ -112,7 +95,7 @@ namespace ChatBot_DB
             double result = 0;
             List<Rack> items = ReadAllItems();
 
-            if (items!=null)
+            if (items != null)
             {
                 foreach (var item in items)
                 { result += sushiDB.ReadItem(new() { Name = item.Name }).Price * item.Amount; }

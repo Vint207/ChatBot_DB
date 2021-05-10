@@ -1,6 +1,5 @@
-﻿using static System.Console;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using static System.Console;
 
 namespace ChatBot_DB
 {
@@ -9,38 +8,56 @@ namespace ChatBot_DB
 
         public void AddItemToBin(User user)
         {
-            SushisTable sushis = new() { TableId = user.SushiTableID };
-            SushiRacksTable sushiRacks = new() { TableId = user.SushiRacksTableID, SushiTableId = user.SushiTableID };
             TableId = user.BinId;
             SushiTableId = user.SushiTableID;
-            
-            List<string> sushiName = new();
+            SushisTable sushis = new() { TableId = user.SushiTableID };
+            SushiRacksTable sushiRacks = new() { TableId = user.SushiRacksTableID, SushiTableId = user.SushiTableID }; 
+            List<string> sushiNames = new();
             List<Rack> items;
             Rack sushiRack = new();
+            Rack tempRack;
             Sushi sushi;
 
             while (true)
             {
                 Clear();
-                WriteLine($"{user.Name}, Выбери суши для добавления в корзину.");
-                WriteLine();
+                WriteLine($"{user.Name}, Выбери суши для добавления в корзину:");
 
                 items = sushiRacks.ReadAllItems();
 
                 if (items != null)
                 {
-                    sushiName.Clear();
+                    sushiNames.Clear();
 
                     foreach (var item in items)
-                    { sushiName?.Add($"{item.Name}. Цена {sushis.ReadItem(new() { Name = item.Name }).Price} р. Количество {item.Amount} шт."); }
+                    { sushiNames?.Add($"{item.Name}. Цена {sushis.ReadItem(new() { Name = item.Name }).Price} р. Количество {item.Amount} шт."); }
 
-                    sushi = sushis.ReadItem(new() { Name = ConsoleWork.Choose(sushiName) });
+                    sushi = sushis.ReadItem(new() { Name = ConsoleWork.Choose(sushiNames) });
 
                     sushiRack.Name = sushi.Name;
 
-                    CreateItem(sushiRack);
-                    sushiRacks.DeleteItem(sushiRack);
+                    tempRack = ReadItem(sushiRack);
 
+                    if (tempRack == null) 
+                    {
+                        CreateItem(sushiRack);
+                    }
+                    else
+                    {
+                        tempRack.Amount++;
+                        UpdateItem(tempRack);
+                    }
+                    tempRack = sushiRacks.ReadItem(sushiRack);
+
+                    if (tempRack.Amount > 1) 
+                    {
+                        tempRack.Amount--;
+                        sushiRacks.UpdateItem(tempRack);
+                    }
+                    else
+                    {
+                        sushiRacks.DeleteItem(tempRack);
+                    }
                     GetBinInfo(user);
                 }
                 if (sushiRacks.GetPrice() <= 0)
@@ -59,14 +76,14 @@ namespace ChatBot_DB
 
         public void DeleteItemFromBin(User user)
         {
-            SushisTable sushis = new() { TableId = user.SushiTableID };
-            SushiRacksTable sushiRacks = new() { TableId = user.SushiRacksTableID, SushiTableId = user.SushiTableID };
             TableId = user.BinId;
             SushiTableId = user.SushiTableID;
-           
-            List<string> sushiName = new();
+            SushisTable sushis = new() { TableId = user.SushiTableID };
+            SushiRacksTable sushiRacks = new() { TableId = user.SushiRacksTableID, SushiTableId = user.SushiTableID };      
+            List<string> sushiNames = new();
             List<Rack> items;
-            Rack sushiRack = new() { Amount = 0 };
+            Rack sushiRack = new() { Amount = 1 };
+            Rack tempRack;
             Sushi sushi;
 
             while (true)
@@ -79,16 +96,37 @@ namespace ChatBot_DB
 
                 if (items != null)
                 {
-                    sushiName.Clear();
+                    sushiNames.Clear();
 
                     foreach (var item in items)
-                    { sushiName?.Add($"{item.Name}. Цена {sushis.ReadItem(new() { Name = item.Name }).Price} р. Количество {item.Amount} шт."); }
+                    { sushiNames?.Add($"{item.Name}. Цена {sushis.ReadItem(new() { Name = item.Name }).Price} р. Количество {item.Amount} шт."); }
 
-                    sushi = sushis.ReadItem(new() { Name = ConsoleWork.Choose(sushiName) });
+                    sushi = sushis.ReadItem(new() { Name = ConsoleWork.Choose(sushiNames) });
 
                     sushiRack.Name = sushi.Name;
-                    DeleteItem(sushiRack);
-                    sushiRacks.CreateItem(sushiRack);                 
+                   
+                    tempRack = sushiRacks.ReadItem(sushiRack);
+
+                    if (tempRack == null)
+                    {
+                        sushiRacks.CreateItem(sushiRack);
+                    }
+                    else
+                    {
+                        tempRack.Amount++;
+                        sushiRacks.UpdateItem(tempRack);
+                    }
+                    tempRack = ReadItem(sushiRack);
+
+                    if (tempRack.Amount > 1)
+                    {
+                        tempRack.Amount--;
+                        UpdateItem(tempRack);
+                    }
+                    else
+                    {
+                        DeleteItem(tempRack);
+                    }
                 }
                 if (GetPrice() <= 0)
                 {
@@ -97,7 +135,7 @@ namespace ChatBot_DB
                     ReadKey();
                     return;
                 }
-                else 
+                else
                 { GetBinInfo(user); }
 
                 WriteLine();
