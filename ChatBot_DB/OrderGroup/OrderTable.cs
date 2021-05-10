@@ -22,7 +22,6 @@ namespace ChatBot_DB
             EventAction += EmailService.SendEmail;
         }
 
-
         public void OpenOrder(User user)
         {
             Clear();
