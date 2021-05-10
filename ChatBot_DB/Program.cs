@@ -6,12 +6,6 @@ namespace ChatBot_DB
     {
         static void Main(string[] args)
         {
-            //usersDB.CreateItem(new() { Name = "Вася", Password = "123456", Mail = "vasya@a.aa", UserID = Guid.NewGuid() });
-            //usersDB.CreateItem(new() { Name = "Петя", Password = "123456", Mail = "petya@a.aa", UserID = Guid.NewGuid() });
-            //usersDB.CreateItem(new() { Name = "Миша", Password = "123456", Mail = "misha@a.aa", UserID = Guid.NewGuid() });
-            //usersDB.CreateItem(new() { Name = "Саша", Password = "123456", Mail = "sasha@a.aa", UserID = Guid.NewGuid() });
-
-
             UserAdmin admin = new();
             admin.CreateUsersTable();
 

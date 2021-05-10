@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    public class ArchiveDB
+    public class ArchiveTable : ICRUD<OrderTable>
     {
 
         public Guid TableId { get; set; }
 
-        public void CreateItem(OrderDB order)
+        public void CreateItem(OrderTable order)
         {
             SqlCommand query = new($"INSERT INTO [{TableId}] VALUES" +
                                    $"(" +
@@ -24,7 +24,7 @@ namespace ChatBot_DB
             QueryDB.ExecuteNonQuery(query);
         }
 
-        public OrderDB ReadItem(OrderDB order)
+        public OrderTable ReadItem(OrderTable order)
 
         {
             SqlCommand query = new($"SELECT * FROM [{TableId}] WHERE OrderID='{order.TableId}'");
@@ -33,7 +33,7 @@ namespace ChatBot_DB
 
             if (!reader.HasRows) { return null; }
 
-            OrderDB tempOrder = new();
+            OrderTable tempOrder = new();
 
             while (reader.Read())
             {
@@ -47,7 +47,7 @@ namespace ChatBot_DB
             return tempOrder;
         }
 
-        public void UpdateItem(OrderDB order)
+        public void UpdateItem(OrderTable order)
         {
             SqlCommand query = new($"UPDATE [{TableId}] SET " +
                                    $"OrderID='{order.TableId}'," +
@@ -58,6 +58,12 @@ namespace ChatBot_DB
                                    $"Closed='{order.Closed}'" +
                                    $"WHERE OrderID='{order.TableId}'");
 
+            QueryDB.ExecuteNonQuery(query);
+        }
+
+        public void DeleteItem(OrderTable order)
+        {
+            SqlCommand query = new($"DELETE [{TableId}] WHERE OrderID='{order.TableId}'");
             QueryDB.ExecuteNonQuery(query);
         }
 
@@ -81,11 +87,11 @@ namespace ChatBot_DB
         {
             SqlCommand query = new($"DROP TABLE [{TableId}]");
             QueryDB.ExecuteNonQuery(query);
-        }
+        }       
 
         public void GetOrderInfo(Guid orderId)
         {
-            OrderDB order = ReadItem(new() { TableId = orderId });
+            OrderTable order = ReadItem(new() { TableId = orderId });
 
             List<Rack> items = order?.ReadAllItems();
             Console.Clear();
@@ -106,7 +112,7 @@ namespace ChatBot_DB
 
                 if (order.Paid)
                 { Console.WriteLine($"Оплачен"); }
-                else 
+                else
                 { Console.WriteLine($"Не оплачен"); }
 
                 Console.ReadKey();

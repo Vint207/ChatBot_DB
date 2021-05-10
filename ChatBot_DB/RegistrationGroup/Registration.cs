@@ -6,20 +6,20 @@ namespace ChatBot_DB
     class Registration
     {
 
-        public static User RegistrateUser(Guid userTableId, Guid sushiTableId, Guid sushiRacksTableId)
+        public static User RegistrateUser(UserAdmin admin)
         {
             User user = new();
             user.UserID = Guid.NewGuid();
-            user.UsersTableID = userTableId;          
-            user.SushiTableID = sushiTableId;
-            user.SushiRacksTableID = sushiRacksTableId;
+            user.UsersTableID = admin.UsersTableID;          
+            user.SushiTableID = admin.SushiTableID;
+            user.SushiRacksTableID = admin.SushiRacksTableID;
 
-            ArchiveDB archive = new();            
+            ArchiveTable archive = new();            
             archive.CreateTable(Guid.NewGuid());
             user.ArchiveId = archive.TableId;       
 
             BinDB bin = new();
-            bin.SushiTableId = sushiTableId;
+            bin.SushiTableId = admin.SushiTableID;
             bin.CreateTable(Guid.NewGuid());
             user.BinId = bin.TableId;
       
@@ -28,9 +28,9 @@ namespace ChatBot_DB
             return user;
         }
 
-        public static User LogInUser(Guid userTableId)
+        public static User LogInUser(UserAdmin admin)
         {
-            UsersDB users = new() { TableId = userTableId };
+            UsersTable users = new() { TableId = admin.UsersTableID };
             User user = new();
 
             Clear();
@@ -47,15 +47,7 @@ namespace ChatBot_DB
 
             WriteLine("Данный пользователь не зарегистрирован.");
             ReadKey();
-
             return null;
         }
-
-        //public static UserAdmin LogInAdmin(UserBase userBase)
-        //{
-        //    ProtoUser user = LogInUser(userBase);
-
-        //    return (user.Mail == "admin@mail.com") ? new() { Name = "Администратор" } : null;
-        //}
     }
 }

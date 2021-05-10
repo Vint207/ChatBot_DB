@@ -7,12 +7,6 @@ namespace ChatBot_DB
     sealed class ChatBot
     {
 
-        public ChatBot()
-        {
-            //_userBase.baseChangedEvent += EventMethods.UserBaseChanged;
-            //_sushiBase.baseChangedEvent += EventMethods.SushiBaseChanged;
-        }
-
         public void MainMenu(UserAdmin admin)
         {
             while (true)
@@ -22,16 +16,16 @@ namespace ChatBot_DB
                 switch (ConsoleWork.Choose(new List<string>() { "Регистрация", "Вход-пользователь" }))
                 {
                     case "Регистрация":
-                        UserMenu(admin, admin.AddUserToUsersTable());
+                        UserMenu(admin.AddUserToUsersTable());
                         break;
                     case "Вход-пользователь":
-                        UserMenu(admin, admin.GetUser());
+                        UserMenu(admin.GetUser());
                         break;
                 }
             }
         }
 
-        void UserMenu(UserAdmin admin, User user)
+        void UserMenu(User user)
         {
             if (user == null) return;
 
@@ -51,13 +45,13 @@ namespace ChatBot_DB
                         user.PutMoney();
                         break;
                     case "Меню-суши":
-                        user.GetAllSushisInfo();
+                        new SushiRacksTable().GetAllSushisInfo(user); 
                         break;
                     case "Меню-корзины":
-                        BinMenu(user);
+                        BinMenu(new(), user);
                         break;
                     case "Меню-заказа":
-                        OrderMenu(user);
+                        OrderMenu(new(), user);
                         break;
                     case "Выйти":
                         return;
@@ -88,7 +82,7 @@ namespace ChatBot_DB
             }
         }
 
-        void BinMenu(User user)
+        void BinMenu(BinDB bin, User user)
         {
             while (true)
             {
@@ -97,13 +91,13 @@ namespace ChatBot_DB
                 switch (ConsoleWork.Choose(new List<string>() { "Просмотеть-корзину", "Добавить-суши", "Удалить-суши", "Назад" }))
                 {
                     case "Просмотеть-корзину":
-                        new BinDB() { TableId = user.BinId, SushiTableId = user.SushiTableID }.GetBinInfo(); 
+                        bin.GetBinInfo(user); 
                         break;
                     case "Добавить-суши":
-                        user.AddItemToBin();
+                        bin.AddItemToBin(user);
                         break;
                     case "Удалить-суши":
-                        user.DeleteItemFromBin();
+                        bin.DeleteItemFromBin(user);
                         break;
                     case "Назад":
                         return;
@@ -111,7 +105,7 @@ namespace ChatBot_DB
             }
         }
 
-        void OrderMenu(User user)
+        void OrderMenu(OrderTable order, User user)
         {
             while (true)
             {
@@ -120,34 +114,15 @@ namespace ChatBot_DB
                 switch (ConsoleWork.Choose(new List<string>() { "Сформировать-заказ", "Просмотреть-заказ", "Оплатить-заказ", "Назад" }))
                 {
                     case "Сформировать-заказ":
-                        user.OpenOrder();
+                        order.OpenOrder(user);
                         break;
                     case "Просмотреть-заказ":
-                        new ArchiveDB() { TableId = user.ArchiveId }.GetOrderInfo(user.LastOrderId);
+                        order.GetOrderInfo(user);
                         break;
-                    case "Оплатить-заказ":       
-                        user.PayOrder();
+                    case "Оплатить-заказ":
+                        order.PayOrder(user);
                         break;
                     case "Назад":
-                        return;
-                }
-            }
-        }
-
-        void GuestMenu(UserGuest guest)
-        {
-            if (guest == null) return;
-
-            while (true)
-            {
-                Clear();
-
-                switch (ConsoleWork.Choose(new List<string>() { "Меню-суши", "Выйти" }))
-                {
-                    case "Меню-суши":
-                        new SushiRacksDB() { TableId = guest.SushiRacksTableID }.GetSushiInfo();
-                        break;
-                    case "Выйти":
                         return;
                 }
             }

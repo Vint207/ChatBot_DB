@@ -4,29 +4,31 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    public class BinDB : RacksDB
+    class SushiRacksTable : RacksTable
     {
 
-
-        public void GetBinInfo()
+        public void GetAllSushisInfo(User user)
         {
+            TableId = user.SushiRacksTableID;
+            SushiTableId = user.SushiTableID;
+
             List<Rack> items = ReadAllItems();
 
             Console.Clear();
 
             if (items != null)
             {
-                Console.WriteLine("Товары в корзине:");
+                Console.WriteLine("Товары в магазине:");
 
                 foreach (var item in items)
                 { item?.GetInfo(); }
 
-                Console.WriteLine($"Стоимость товаров в корзине {GetPrice()} р.");
+                Console.WriteLine($"Стоимость товаров в магазине {GetPrice()} р.");
 
                 Console.ReadKey();
                 return;
             }
-            Console.WriteLine("Корзина пуста");
+            Console.WriteLine("В магазине нет товаров");
             Console.ReadKey();
             return;
         }

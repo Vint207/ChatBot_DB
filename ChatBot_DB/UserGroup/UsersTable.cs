@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    public class UsersDB
+    public class UsersTable : ICRUD<User>
     {
 
         public Guid TableId { get; set; }
@@ -24,26 +24,6 @@ namespace ChatBot_DB
                 $"'{user.SushiTableID}'," +
                 $"'{user.SushiRacksTableID}'," +
                 $"'{user.UsersTableID}')");
-
-            QueryDB.ExecuteNonQuery(query);
-        }
-
-        public void UpdateItem(User user)
-        {
-            SqlCommand query = new($"UPDATE [{TableId}] SET " +
-                $"Name='{user.Name}'," +
-                $"Password='{user.Password}'," +
-                $"Mail='{user.Mail}'," +
-                $"Money='{user.Money}'," +
-                $"LastTransaction='{user.LastTransaction}'," +
-                $"UserID='{user.UserID}'," +
-                $"ArchiveId='{user.ArchiveId}'," +
-                $"BinId='{user.BinId}'," +
-                $"LastOrderId='{user.LastOrderId}'," +
-                $"SushiTableID='{user.SushiTableID}'," +
-                $"SushiRacksTableID='{user.SushiRacksTableID}'," +
-                $"UsersTableID='{user.UsersTableID}'" +
-                $"WHERE UserID='{user.UserID}'");
 
             QueryDB.ExecuteNonQuery(query);
         }
@@ -75,6 +55,26 @@ namespace ChatBot_DB
             }
             reader.Close();
             return tempUser;
+        }
+
+        public void UpdateItem(User user)
+        {
+            SqlCommand query = new($"UPDATE [{TableId}] SET " +
+                $"Name='{user.Name}'," +
+                $"Password='{user.Password}'," +
+                $"Mail='{user.Mail}'," +
+                $"Money='{user.Money}'," +
+                $"LastTransaction='{user.LastTransaction}'," +
+                $"UserID='{user.UserID}'," +
+                $"ArchiveId='{user.ArchiveId}'," +
+                $"BinId='{user.BinId}'," +
+                $"LastOrderId='{user.LastOrderId}'," +
+                $"SushiTableID='{user.SushiTableID}'," +
+                $"SushiRacksTableID='{user.SushiRacksTableID}'," +
+                $"UsersTableID='{user.UsersTableID}'" +
+                $"WHERE UserID='{user.UserID}'");
+
+            QueryDB.ExecuteNonQuery(query);
         }
 
         public void DeleteItem(User user)

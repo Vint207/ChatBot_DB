@@ -15,6 +15,7 @@ namespace ChatBot_DB
         public Guid SushiTableID { get; set; }
         public Guid SushiRacksTableID { get; set; }
         public Guid UsersTableID { get; set; }
+       
 
         [Required(ErrorMessage = "Поле не может быть пустым. Введи новое имя:")]
         [RegularExpression(@"^[a-z\nA-Z\nа-я\nА-Я]{1,12}$", ErrorMessage = "Некорректный формат имени. Введи новое имя:")]
@@ -24,9 +25,8 @@ namespace ChatBot_DB
         [RegularExpression(@"^[a-z\|A-Z\|0-9]{6,12}$", ErrorMessage = "Некорректный формат пароля. Введи новый пароль:")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Поле не может быть пустым. Введи новый адрес почты:")]
-        [RegularExpression(@"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-         @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$", ErrorMessage = "Недопустимый адрес электронной почты. Введи новый адрес почты:")]
+        [Required(ErrorMessage = "Поле не может быть пустым. Введи новый адрес почты:")] 
+        [EmailAddress(ErrorMessage = "Недопустимый адрес электронной почты. Введи новый адрес почты:")]
         public string Mail { get; set; }
 
         [Required(ErrorMessage = "Поле не может быть пустым. Введи сумму заново:")]

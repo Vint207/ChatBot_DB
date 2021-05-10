@@ -1,20 +1,14 @@
 ﻿namespace ChatBot_DB
 {
+
     interface ICRUD<T>
     {
-        bool AddItem(T t);
+        void CreateItem(T t);
 
-        bool DeleteItem(T t);
+        T ReadItem(T t);
 
-        T GetItem(T t);
-    }
+        void UpdateItem(T t);
 
-    interface ICRUD<T, T1>
-    {
-        bool AddItem(T t, T1 t1);
-
-        bool DeleteItem(T t, T1 t1);
-
-        T GetItem(T t, T1 t1);
+        void DeleteItem(T t);
     }
 }

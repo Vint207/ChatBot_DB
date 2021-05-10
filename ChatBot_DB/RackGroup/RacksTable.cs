@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    public class RacksDB //: IDisposable
+    public class RacksTable : ICRUD<Rack>
     {
 
         public Guid TableId { get; set; }
@@ -86,7 +86,8 @@ namespace ChatBot_DB
                 if (!reader.HasRows) { return null; }
 
                 while (reader.Read())
-                { racks.Add(new() { Name = (string)reader["Name"], Amount = (int)reader["Amount"] }); }
+                { racks.Add(new() 
+                { Name = (string)reader["Name"], Amount = (int)reader["Amount"] }); }
 
                 return racks;
             }
@@ -107,7 +108,7 @@ namespace ChatBot_DB
 
         public double GetPrice()
         {
-            SushisDB sushiDB = new() { TableId = SushiTableId };
+            SushisTable sushiDB = new() { TableId = SushiTableId };
             double result = 0;
             List<Rack> items = ReadAllItems();
 

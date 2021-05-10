@@ -8,8 +8,9 @@ namespace ChatBot_DB
         public string Name { get; set; }
         public int Amount { get; set; }
 
-        public void GetInfo(Sushi sushi) =>
-             Console.WriteLine($"- {Name}. Количество {Amount} шт.");
-
+        public void GetInfo(Sushi sushi)
+        {
+            Console.WriteLine($"- {Name}. Количество {Amount} шт.");
+        }
     }
 }

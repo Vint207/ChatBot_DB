@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ChatBot_DB
 {
-    public class SushisDB
+    public class SushisTable : ICRUD<Sushi>
     {
 
         public Guid TableId { get; set; }
@@ -22,15 +22,6 @@ namespace ChatBot_DB
             }
         }
 
-        public void UpdateItem(Sushi sushi)
-        {
-            SqlCommand query = new($"UPDATE [{TableId}] SET " +
-                                     $"Name='{sushi.Name}'," +
-                                     $"Price={sushi.Price}" +
-                                     $"WHERE ID='{sushi.ID}'");
-            QueryDB.ExecuteNonQuery(query);
-        }
-
         public Sushi ReadItem(Sushi sushi)
         {
             SqlCommand query = new($"SELECT * FROM [{TableId}] WHERE Name='{sushi.Name}'");
@@ -40,7 +31,7 @@ namespace ChatBot_DB
             Sushi tempSushi = new();
 
             if (!reader.HasRows) { return null; }
-        
+
             while (reader.Read())
             {
                 tempSushi.Name = (string)reader["Name"];
@@ -50,6 +41,15 @@ namespace ChatBot_DB
             reader.Close();
             return tempSushi;
         }
+
+        public void UpdateItem(Sushi sushi)
+        {
+            SqlCommand query = new($"UPDATE [{TableId}] SET " +
+                                     $"Name='{sushi.Name}'," +
+                                     $"Price={sushi.Price}" +
+                                     $"WHERE ID='{sushi.ID}'");
+            QueryDB.ExecuteNonQuery(query);
+        }       
 
         public void DeleteItem(Sushi sushi)
         {
