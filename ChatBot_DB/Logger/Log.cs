@@ -8,44 +8,54 @@ namespace ChatBot_DB
     public class Log
     {
 
-        static string _filePath;
+        static string _filePath = "C";
         static int _fileCount;
 
-        public static void LogDebug(string message, Exception ex, [CallerMemberName] string method = "")
+        public static void LogDebug(string message, [CallerMemberName] string method = "")
         {
-            WriteToFile("DEBUG", ex, message, method);
+            DateTime t = DateTime.Now;
+            WriteToFile($"DEBUG | Время: {t.TimeOfDay}. Метод: {method}. Событие: {message}");
         }
 
         public static void LogInfo(string message, Exception ex, [CallerMemberName] string method = "")
         {
-            WriteToFile("Info", ex, message, method);
+            DateTime t = DateTime.Now;
+            WriteToFile($"INFO | Время: {t.TimeOfDay}. Метод: {method}. Событие: {message}. Исключение: {ex.Message}");
         }
 
         public static void LogError(string message, Exception ex, [CallerMemberName] string method = "")
         {
-            WriteToFile("Error", ex, message, method);
+            DateTime t = DateTime.Now;
+            WriteToFile($"ERROR | Время: {t.TimeOfDay}. Метод: {method}. Событие: {message}. Исключение: {ex.Message}");
         }
 
-        static void WriteToFile(string logLevel, Exception ex, string message, string method)
+        static void WriteToFile(string message)
         {
-            DateTime dateTime = DateTime.Now;         
+            StreamWriter writer = GetFileInfo().AppendText();
+            writer.WriteLine(message);
+            writer.Close();
+        }
 
-            if (_filePath==null)
-            {
-                _filePath = @$"C:\Users\Admin\source\repos\ChatBot_DB\Log\log_{dateTime.Year}{dateTime.Month}{dateTime.Day}_{_fileCount}.txt";
-            }
+        static FileInfo GetFileInfo()
+        {
             FileInfo fileInfo = new(_filePath);
 
-            if (!fileInfo.Exists || fileInfo.Length >= 30000)
+            if (_fileCount == 0 || fileInfo.Length >= 30000)
             {
-                _fileCount++;
-                fileInfo = new(_filePath);
-                FileStream fileStream = fileInfo.Create();
-                fileStream.Close();
+              return CreateNewFile();
             }
-            StreamWriter writer = fileInfo.AppendText();
-            writer.WriteLine($"{logLevel}: Время {dateTime.TimeOfDay}. Метод {method}. {ex.Message} {message}");
-            writer.Close();
+            return fileInfo;
+        }
+
+        static FileInfo CreateNewFile()
+        {
+            DateTime time = DateTime.Now;
+            _fileCount++;
+            _filePath = @$"C:\Users\Admin\source\repos\ChatBot_DB\Log\log_{time.Day}{time.Month}{time.Year}_{_fileCount}.txt";
+            FileInfo fileInfo = new(_filePath);
+            FileStream fileStream = fileInfo.Create();
+            fileStream.Close();
+            return fileInfo;
         }
     }
 }

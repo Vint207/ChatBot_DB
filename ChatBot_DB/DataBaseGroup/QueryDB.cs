@@ -21,6 +21,7 @@ namespace ChatBot_DB
             }
             catch (SqlException ex)
             {
+                Log.LogInfo($"Попытка выполнить запрос {query} к базе. Исключение:", ex);
                 Console.WriteLine(ex.Message);
                 Console.ReadKey();
                 return null;
@@ -39,6 +40,7 @@ namespace ChatBot_DB
             }
             catch (SqlException ex)
             {
+                Log.LogInfo($"Попытка выполнить запрос {query} к базе. Исключение:", ex);
                 Console.WriteLine(ex.Message);
                 Console.ReadKey();
             }

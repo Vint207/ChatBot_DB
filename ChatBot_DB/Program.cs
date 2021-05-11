@@ -6,8 +6,7 @@ namespace ChatBot_DB
     {
         static void Main(string[] args)
         {
-            Log.LogInfo("---Программа запущена---", new(""));
-            Log.LogInfo("Все ОК", new(""));
+            Log.LogDebug("---Программа запущена---");
 
             UserAdmin admin = new();
             admin.CreateUsersTable();
@@ -24,7 +23,7 @@ namespace ChatBot_DB
 
             new ChatBot().MainMenu(admin);
 
-            Log.LogInfo("---Программа остановлена---", new(""));
+            Log.LogDebug("---Программа остановлена---");
         }
     }
 }

@@ -41,11 +41,16 @@ namespace ChatBot_DB
                    
                     Clear();
 
-                    foreach (var item in results) { WriteLine(item.ErrorMessage); }
+                    foreach (var item in results) 
+                    {
+                        Log.LogDebug($"Валидация входных данных. Исключение: {item.ErrorMessage}");
+                        WriteLine(item.ErrorMessage);
+                    }
                 }
                 catch (Exception ex)
                 {
                     Clear();
+                    Log.LogInfo("Валидация входных данных. Исключение:", ex);
                     WriteLine(ex.Message);
                     WriteLine("Попробуй еще раз:");
                 };                              
